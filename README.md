@@ -150,8 +150,8 @@ docker build -t iso8583-simulator .
 
 # Ejecutar contenedor
 docker run -p 8080:8080 \
--e ISO8583_SWITCH_HOST=172.16.1.211 \
--e ISO8583_SWITCH_PORT=5105 \
+-e ISO8583_SWITCH_HOST=x.x.x.x \
+-e ISO8583_SWITCH_PORT=xxxx \
 iso8583-simulator
 🧪 Testing
 Ejecutar todas las pruebas
