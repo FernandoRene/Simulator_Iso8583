@@ -1,0 +1,79 @@
+field-generation:
+  timestamp-fields:
+    field-7:  # TRANSMISSION_DATE_TIME
+      type: DYNAMIC
+      format: "MMddHHmmss"
+      description: "Transmission date and time"
+    field-12: # TIME
+      type: DYNAMIC
+      format: "HHmmss"
+      description: "Local transaction time"
+    field-13: # DATE
+      type: DYNAMIC
+      format: "MMdd"
+      description: "Local transaction date"
+    field-15: # SETTLEMENT_DATE
+      type: DYNAMIC
+      format: "MMdd"
+      description: "Settlement date"
+
+  sequential-fields:
+    field-11: # TRACE (STAN)
+      type: SEQUENTIAL
+      start-value: 1
+      increment: 1
+      format: "000000"
+      reset-daily: true
+      description: "System trace audit number"
+
+  composite-fields:
+    field-37: # RRN
+      type: TEMPLATE
+      template: "{julian-date}{trace}"
+      max-length: 12
+      description: "Retrieval reference number"
+      components:
+        julian-date:
+          type: DYNAMIC
+          format: "yyDDD"
+        trace:
+          type: REFERENCE
+          field: 11
+
+  static-fields:
+    field-3: # PROCESSING_CODE
+      type: STATIC
+      value: "301099"
+      description: "Processing code for balance inquiry"
+    field-14: # EXPIRATION_DATE
+      type: STATIC
+      value: "2709"
+      description: "Card expiration date"
+    field-18: # MCC
+      type: STATIC
+      value: "6011"
+      description: "Merchant category code"
+    field-19: # COUNTRY_CODE
+      type: STATIC
+      value: "068"
+      description: "Country code"
+    field-22: # POS_ENTRY_MODE
+      type: STATIC
+      value: "051"
+      description: "Point of service entry mode"
+    field-25: # POS_CONDITION_CODE
+      type: STATIC
+      value: "02"
+      description: "Point of service condition code"
+    field-32: # ACQUIRING_ID
+      type: STATIC
+      value: "409911"
+      description: "Acquiring institution identification"
+    field-49: # CURRENCY_CODE
+      type: STATIC
+      value: "068"
+      description: "Currency code"
+    field-52: # PIN_DATA
+      type: STATIC
+      value: "A40E451FBDD1128B"
+      description: "PIN data (encrypted)"

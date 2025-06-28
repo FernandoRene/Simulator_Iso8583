@@ -1,0 +1,144 @@
+2025-06-28 00:04:21 [restartedMain] INFO  c.i.s.Iso8583SimulatorApplication - Starting Iso8583SimulatorApplication using Java 21.0.6 with PID 7952 (D:\iso8583-simulator\target\classes started by FernandoRene in D:\iso8583-simulator)
+2025-06-28 00:04:21 [restartedMain] DEBUG c.i.s.Iso8583SimulatorApplication - Running with Spring Boot v3.1.2, Spring v6.0.11
+2025-06-28 00:04:21 [restartedMain] INFO  c.i.s.Iso8583SimulatorApplication - The following 1 profile is active: "dev"
+2025-06-28 00:04:21 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2025-06-28 00:04:21 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2025-06-28 00:04:21 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 8081 (http)
+2025-06-28 00:04:21 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2025-06-28 00:04:21 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.11]
+2025-06-28 00:04:21 [restartedMain] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2025-06-28 00:04:21 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 808 ms
+2025-06-28 00:04:21 [restartedMain] DEBUG o.s.w.f.ServerHttpObservationFilter - Filter 'webMvcObservationFilter' configured for use
+2025-06-28 00:04:21 [restartedMain] INFO  c.i.s.simulator.MessageSimulator - MessageSimulator inicializado en modo simplificado
+2025-06-28 00:04:22 [restartedMain] INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 4 endpoint(s) beneath base path '/actuator'
+2025-06-28 00:04:22 [restartedMain] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerAdapter - ControllerAdvice beans: 0 @ModelAttribute, 0 @InitBinder, 1 RequestBodyAdvice, 1 ResponseBodyAdvice
+2025-06-28 00:04:22 [restartedMain] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - 14 mappings in 'requestMappingHandlerMapping'
+2025-06-28 00:04:22 [restartedMain] DEBUG o.s.w.s.h.SimpleUrlHandlerMapping - Patterns [/webjars/**, /**, /swagger-ui*/*swagger-initializer.js, /swagger-ui*/**] in 'resourceHandlerMapping'
+2025-06-28 00:04:22 [restartedMain] DEBUG o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - ControllerAdvice beans: 1 @ExceptionHandler, 1 ResponseBodyAdvice
+2025-06-28 00:04:22 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2025-06-28 00:04:22 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 8081 (http) with context path ''
+2025-06-28 00:04:22 [restartedMain] INFO  c.i.s.Iso8583SimulatorApplication - Started Iso8583SimulatorApplication in 1.496 seconds (process running for 1.754)
+2025-06-28 00:04:22 [restartedMain] INFO  c.i.s.Iso8583SimulatorApplication - 
+----------------------------------------------------------
+🚀 ISO8583 Simulator está ejecutándose!
+----------------------------------------------------------
+  Local:       http://localhost:8081/
+  Externo:     http://172.17.128.1:8081/
+  Perfil:      dev
+  Swagger UI:  http://localhost:8081/swagger-ui.html
+  API Docs:    http://localhost:8081/api-docs
+  Health:      http://localhost:8081/api/v1/simulator/health
+----------------------------------------------------------
+💡 Prueba los endpoints en Swagger UI para comenzar!
+----------------------------------------------------------
+
+2025-06-28 00:06:41 [http-nio-8081-exec-1] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-06-28 00:06:41 [http-nio-8081-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2025-06-28 00:06:41 [http-nio-8081-exec-1] DEBUG o.s.web.servlet.DispatcherServlet - Detected StandardServletMultipartResolver
+2025-06-28 00:06:41 [http-nio-8081-exec-1] DEBUG o.s.web.servlet.DispatcherServlet - Detected AcceptHeaderLocaleResolver
+2025-06-28 00:06:41 [http-nio-8081-exec-1] DEBUG o.s.web.servlet.DispatcherServlet - Detected FixedThemeResolver
+2025-06-28 00:06:41 [http-nio-8081-exec-1] DEBUG o.s.web.servlet.DispatcherServlet - Detected org.springframework.web.servlet.view.DefaultRequestToViewNameTranslator@6e8985cc
+2025-06-28 00:06:41 [http-nio-8081-exec-1] DEBUG o.s.web.servlet.DispatcherServlet - Detected org.springframework.web.servlet.support.SessionFlashMapManager@1873dd78
+2025-06-28 00:06:41 [http-nio-8081-exec-1] DEBUG o.s.web.servlet.DispatcherServlet - enableLoggingRequestDetails='false': request parameters and headers will be masked to prevent unsafe logging of potentially sensitive data
+2025-06-28 00:06:41 [http-nio-8081-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 2 ms
+2025-06-28 00:06:41 [http-nio-8081-exec-1] DEBUG o.s.web.servlet.DispatcherServlet - GET "/swagger-ui/index.html", parameters={}
+2025-06-28 00:06:41 [http-nio-8081-exec-1] DEBUG o.s.w.s.h.SimpleUrlHandlerMapping - Mapped to ResourceHttpRequestHandler [classpath [META-INF/resources/webjars/]]
+2025-06-28 00:06:41 [http-nio-8081-exec-1] DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+2025-06-28 00:06:41 [http-nio-8081-exec-2] DEBUG o.s.web.servlet.DispatcherServlet - GET "/swagger-ui/swagger-ui.css", parameters={}
+2025-06-28 00:06:41 [http-nio-8081-exec-5] DEBUG o.s.web.servlet.DispatcherServlet - GET "/swagger-ui/index.css", parameters={}
+2025-06-28 00:06:41 [http-nio-8081-exec-4] DEBUG o.s.web.servlet.DispatcherServlet - GET "/swagger-ui/swagger-ui-standalone-preset.js", parameters={}
+2025-06-28 00:06:41 [http-nio-8081-exec-3] DEBUG o.s.web.servlet.DispatcherServlet - GET "/swagger-ui/swagger-ui-bundle.js", parameters={}
+2025-06-28 00:06:41 [http-nio-8081-exec-9] DEBUG o.s.web.servlet.DispatcherServlet - GET "/swagger-ui/swagger-initializer.js", parameters={}
+2025-06-28 00:06:41 [http-nio-8081-exec-5] DEBUG o.s.w.s.h.SimpleUrlHandlerMapping - Mapped to ResourceHttpRequestHandler [classpath [META-INF/resources/webjars/]]
+2025-06-28 00:06:41 [http-nio-8081-exec-2] DEBUG o.s.w.s.h.SimpleUrlHandlerMapping - Mapped to ResourceHttpRequestHandler [classpath [META-INF/resources/webjars/]]
+2025-06-28 00:06:41 [http-nio-8081-exec-4] DEBUG o.s.w.s.h.SimpleUrlHandlerMapping - Mapped to ResourceHttpRequestHandler [classpath [META-INF/resources/webjars/]]
+2025-06-28 00:06:41 [http-nio-8081-exec-3] DEBUG o.s.w.s.h.SimpleUrlHandlerMapping - Mapped to ResourceHttpRequestHandler [classpath [META-INF/resources/webjars/]]
+2025-06-28 00:06:41 [http-nio-8081-exec-9] DEBUG o.s.w.s.h.SimpleUrlHandlerMapping - Mapped to ResourceHttpRequestHandler [classpath [META-INF/resources/webjars/]]
+2025-06-28 00:06:41 [http-nio-8081-exec-5] DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+2025-06-28 00:06:41 [http-nio-8081-exec-2] DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+2025-06-28 00:06:41 [http-nio-8081-exec-4] DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+2025-06-28 00:06:41 [http-nio-8081-exec-9] DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+2025-06-28 00:06:41 [http-nio-8081-exec-3] DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+2025-06-28 00:06:41 [http-nio-8081-exec-7] DEBUG o.s.web.servlet.DispatcherServlet - GET "/api-docs/swagger-config", parameters={}
+2025-06-28 00:06:41 [http-nio-8081-exec-8] DEBUG o.s.web.servlet.DispatcherServlet - GET "/swagger-ui/favicon-32x32.png", parameters={}
+2025-06-28 00:06:41 [http-nio-8081-exec-7] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.springdoc.webmvc.ui.SwaggerConfigResource#openapiJson(HttpServletRequest)
+2025-06-28 00:06:41 [http-nio-8081-exec-8] DEBUG o.s.w.s.h.SimpleUrlHandlerMapping - Mapped to ResourceHttpRequestHandler [classpath [META-INF/resources/webjars/]]
+2025-06-28 00:06:41 [http-nio-8081-exec-8] DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+2025-06-28 00:06:41 [http-nio-8081-exec-7] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Using 'application/json', given [*/*] and supported [application/json]
+2025-06-28 00:06:41 [http-nio-8081-exec-7] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Writing [{configUrl=/api-docs/swagger-config, oauth2RedirectUrl=http://localhost:8081/swagger-ui/oauth2-redir (truncated)...]
+2025-06-28 00:06:41 [http-nio-8081-exec-7] DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+2025-06-28 00:06:41 [http-nio-8081-exec-6] DEBUG o.s.web.servlet.DispatcherServlet - GET "/api-docs", parameters={}
+2025-06-28 00:06:41 [http-nio-8081-exec-6] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.springdoc.webmvc.api.OpenApiWebMvcResource#openapiJson(HttpServletRequest, String, Locale)
+2025-06-28 00:06:41 [http-nio-8081-exec-6] INFO  o.s.api.AbstractOpenApiResource - Init duration for springdoc-openapi is: 210 ms
+2025-06-28 00:06:41 [http-nio-8081-exec-6] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Using 'application/json', given [application/json, */*] and supported [application/json]
+2025-06-28 00:06:41 [http-nio-8081-exec-6] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Writing [{123, 34, 111, 112, 101, 110, 97, 112, 105, 34, 58, 34, 51, 46, 48, 46, 49, 34, 44, 34, 105, 110, 10 (truncated)...]
+2025-06-28 00:06:41 [http-nio-8081-exec-6] DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+2025-06-28 00:06:48 [http-nio-8081-exec-10] DEBUG o.s.web.servlet.DispatcherServlet - GET "/api/v1/simulator/stats", parameters={}
+2025-06-28 00:06:48 [http-nio-8081-exec-10] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.iso8583.simulator.web.controller.SimulatorController#getSimulatorStats()
+2025-06-28 00:06:48 [http-nio-8081-exec-10] DEBUG c.i.s.w.c.SimulatorController - Getting simulator statistics
+2025-06-28 00:06:48 [http-nio-8081-exec-10] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-06-28 00:06:48 [http-nio-8081-exec-10] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [{averageResponseTime=40, failedResponses=4, connectionStatus={connected=true, port=5105, host=172.16 (truncated)...]
+2025-06-28 00:06:48 [http-nio-8081-exec-10] DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+2025-06-28 00:06:50 [http-nio-8081-exec-1] DEBUG o.s.web.servlet.DispatcherServlet - GET "/api/v1/simulator/stats", parameters={}
+2025-06-28 00:06:50 [http-nio-8081-exec-1] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.iso8583.simulator.web.controller.SimulatorController#getSimulatorStats()
+2025-06-28 00:06:50 [http-nio-8081-exec-1] DEBUG c.i.s.w.c.SimulatorController - Getting simulator statistics
+2025-06-28 00:06:50 [http-nio-8081-exec-1] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-06-28 00:06:50 [http-nio-8081-exec-1] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [{averageResponseTime=78, failedResponses=9, connectionStatus={connected=true, port=5105, host=172.16 (truncated)...]
+2025-06-28 00:06:50 [http-nio-8081-exec-1] DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+2025-06-28 00:06:55 [http-nio-8081-exec-5] DEBUG o.s.web.servlet.DispatcherServlet - GET "/swagger-ui/index.html", parameters={}
+2025-06-28 00:06:55 [http-nio-8081-exec-5] DEBUG o.s.w.s.h.SimpleUrlHandlerMapping - Mapped to ResourceHttpRequestHandler [classpath [META-INF/resources/webjars/]]
+2025-06-28 00:06:55 [http-nio-8081-exec-5] DEBUG o.s.web.servlet.DispatcherServlet - Completed 304 NOT_MODIFIED
+2025-06-28 00:06:56 [http-nio-8081-exec-2] DEBUG o.s.web.servlet.DispatcherServlet - GET "/swagger-ui/swagger-initializer.js", parameters={}
+2025-06-28 00:06:56 [http-nio-8081-exec-2] DEBUG o.s.w.s.h.SimpleUrlHandlerMapping - Mapped to ResourceHttpRequestHandler [classpath [META-INF/resources/webjars/]]
+2025-06-28 00:06:56 [http-nio-8081-exec-2] DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+2025-06-28 00:06:56 [http-nio-8081-exec-4] DEBUG o.s.web.servlet.DispatcherServlet - GET "/api-docs/swagger-config", parameters={}
+2025-06-28 00:06:56 [http-nio-8081-exec-4] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.springdoc.webmvc.ui.SwaggerConfigResource#openapiJson(HttpServletRequest)
+2025-06-28 00:06:56 [http-nio-8081-exec-4] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Using 'application/json', given [*/*] and supported [application/json]
+2025-06-28 00:06:56 [http-nio-8081-exec-4] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Writing [{configUrl=/api-docs/swagger-config, oauth2RedirectUrl=http://localhost:8081/swagger-ui/oauth2-redir (truncated)...]
+2025-06-28 00:06:56 [http-nio-8081-exec-4] DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+2025-06-28 00:06:56 [http-nio-8081-exec-9] DEBUG o.s.web.servlet.DispatcherServlet - GET "/api-docs", parameters={}
+2025-06-28 00:06:56 [http-nio-8081-exec-9] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.springdoc.webmvc.api.OpenApiWebMvcResource#openapiJson(HttpServletRequest, String, Locale)
+2025-06-28 00:06:56 [http-nio-8081-exec-9] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Using 'application/json', given [application/json, */*] and supported [application/json]
+2025-06-28 00:06:56 [http-nio-8081-exec-9] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Writing [{123, 34, 111, 112, 101, 110, 97, 112, 105, 34, 58, 34, 51, 46, 48, 46, 49, 34, 44, 34, 105, 110, 10 (truncated)...]
+2025-06-28 00:06:56 [http-nio-8081-exec-9] DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+2025-06-28 00:07:35 [http-nio-8081-exec-3] DEBUG o.s.web.servlet.DispatcherServlet - GET "/swagger-ui.html", parameters={}
+2025-06-28 00:07:35 [http-nio-8081-exec-3] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.springdoc.webmvc.ui.SwaggerWelcomeWebMvc#redirectToUi(HttpServletRequest)
+2025-06-28 00:07:35 [http-nio-8081-exec-3] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json;q=0.8', given [text/html, application/xhtml+xml, image/avif, image/webp, image/apng, application/xml;q=0.9, */*;q=0.8, application/signed-exchange;v=b3;q=0.7] and supported [application/json, application/*+json]
+2025-06-28 00:07:35 [http-nio-8081-exec-3] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Nothing to write: null body
+2025-06-28 00:07:35 [http-nio-8081-exec-3] DEBUG o.s.web.servlet.DispatcherServlet - Completed 302 FOUND
+2025-06-28 00:07:35 [http-nio-8081-exec-8] DEBUG o.s.web.servlet.DispatcherServlet - GET "/swagger-ui/swagger-initializer.js", parameters={}
+2025-06-28 00:07:35 [http-nio-8081-exec-8] DEBUG o.s.w.s.h.SimpleUrlHandlerMapping - Mapped to ResourceHttpRequestHandler [classpath [META-INF/resources/webjars/]]
+2025-06-28 00:07:35 [http-nio-8081-exec-8] DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+2025-06-28 00:07:35 [http-nio-8081-exec-7] DEBUG o.s.web.servlet.DispatcherServlet - GET "/api-docs/swagger-config", parameters={}
+2025-06-28 00:07:35 [http-nio-8081-exec-7] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.springdoc.webmvc.ui.SwaggerConfigResource#openapiJson(HttpServletRequest)
+2025-06-28 00:07:35 [http-nio-8081-exec-7] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Using 'application/json', given [*/*] and supported [application/json]
+2025-06-28 00:07:35 [http-nio-8081-exec-7] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Writing [{configUrl=/api-docs/swagger-config, oauth2RedirectUrl=http://localhost:8081/swagger-ui/oauth2-redir (truncated)...]
+2025-06-28 00:07:35 [http-nio-8081-exec-7] DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+2025-06-28 00:07:35 [http-nio-8081-exec-6] DEBUG o.s.web.servlet.DispatcherServlet - GET "/api-docs", parameters={}
+2025-06-28 00:07:35 [http-nio-8081-exec-6] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.springdoc.webmvc.api.OpenApiWebMvcResource#openapiJson(HttpServletRequest, String, Locale)
+2025-06-28 00:07:35 [http-nio-8081-exec-6] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Using 'application/json', given [application/json, */*] and supported [application/json]
+2025-06-28 00:07:35 [http-nio-8081-exec-6] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Writing [{123, 34, 111, 112, 101, 110, 97, 112, 105, 34, 58, 34, 51, 46, 48, 46, 49, 34, 44, 34, 105, 110, 10 (truncated)...]
+2025-06-28 00:07:35 [http-nio-8081-exec-6] DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+2025-06-28 00:07:49 [http-nio-8081-exec-4] DEBUG o.s.web.servlet.DispatcherServlet - POST "/api/v1/simulator/connection/test", parameters={}
+2025-06-28 00:07:49 [http-nio-8081-exec-4] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.iso8583.simulator.web.controller.SimulatorController#testConnection()
+2025-06-28 00:07:49 [http-nio-8081-exec-4] INFO  c.i.s.w.c.SimulatorController - Testing connection to authorizer
+2025-06-28 00:07:49 [http-nio-8081-exec-4] DEBUG o.s.w.c.r.async.WebAsyncManager - Started async request
+2025-06-28 00:07:49 [http-nio-8081-exec-4] DEBUG o.s.web.servlet.DispatcherServlet - Exiting but response remains open for further handling
+2025-06-28 00:07:50 [ForkJoinPool.commonPool-worker-3] DEBUG o.s.w.c.r.async.WebAsyncManager - Async result set, dispatch to /api/v1/simulator/connection/test
+2025-06-28 00:07:50 [http-nio-8081-exec-9] DEBUG o.s.web.servlet.DispatcherServlet - "ASYNC" dispatch for POST "/api/v1/simulator/connection/test", parameters={}
+2025-06-28 00:07:50 [http-nio-8081-exec-9] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerAdapter - Resume with async result [<200 OK OK,{success=true, responseTime=68, message=Conexión exitosa, timestamp=2025-06-28T00:07:50.9 (truncated)...]
+2025-06-28 00:07:50 [http-nio-8081-exec-9] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-06-28 00:07:50 [http-nio-8081-exec-9] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [{success=true, responseTime=68, message=Conexión exitosa, timestamp=2025-06-28T00:07:50.988734600}]
+2025-06-28 00:07:50 [http-nio-8081-exec-9] DEBUG o.s.web.servlet.DispatcherServlet - Exiting from "ASYNC" dispatch, status 200
+2025-06-28 00:08:20 [http-nio-8081-exec-3] DEBUG o.s.web.servlet.DispatcherServlet - GET "/actuator", parameters={}
+2025-06-28 00:08:20 [http-nio-8081-exec-3] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Using 'application/vnd.spring-boot.actuator.v3+json', given [application/vnd.spring-boot.actuator.v3+json] and supported [application/vnd.spring-boot.actuator.v3+json]
+2025-06-28 00:08:20 [http-nio-8081-exec-3] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Writing [{_links={self=[Link@b5e978 href = 'http://localhost:8081/actuator'], health=[Link@69696984 href = 'h (truncated)...]
+2025-06-28 00:08:20 [http-nio-8081-exec-3] DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+2025-06-28 00:08:21 [http-nio-8081-exec-8] DEBUG o.s.web.servlet.DispatcherServlet - GET "/actuator", parameters={}
+2025-06-28 00:08:21 [http-nio-8081-exec-8] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Using 'application/vnd.spring-boot.actuator.v3+json', given [application/vnd.spring-boot.actuator.v3+json] and supported [application/vnd.spring-boot.actuator.v3+json]
+2025-06-28 00:08:21 [http-nio-8081-exec-8] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Writing [{_links={self=[Link@66cc7428 href = 'http://localhost:8081/actuator'], health=[Link@6d939b8e href =  (truncated)...]
+2025-06-28 00:08:21 [http-nio-8081-exec-8] DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+2025-06-28 00:08:30 [http-nio-8081-exec-7] DEBUG o.s.web.servlet.DispatcherServlet - GET "/actuator/prometheus", parameters={}
+2025-06-28 00:08:30 [http-nio-8081-exec-7] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Found 'Content-Type:text/plain;version=0.0.4;charset=utf-8' in response
+2025-06-28 00:08:30 [http-nio-8081-exec-7] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing ["# HELP executor_active_threads The approximate number of threads that are actively executing tasks<EOL># (truncated)..."]
+2025-06-28 00:08:30 [http-nio-8081-exec-7] DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
