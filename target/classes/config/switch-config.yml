@@ -1,0 +1,34 @@
+switches:
+  your-switch:
+    name: "Core Bancario"
+    description: "Configuración para el autorizador principal"
+    connection:
+      host: "172.16.1.211"
+      port: 5105
+      protocol: "TCP"
+      channel: "ASCIIChannel"
+      timeout: 60000
+      keep-alive: true
+    packager:
+      type: "GenericValidatingPackager"
+      config-file: "packagers/generic-packager.xml"
+    validation:
+      success-response-code: "00"
+      response-field: 39
+      required-fields: [0, 1, 2, 3, 7, 11, 12, 13, 37, 41, 42]
+
+  mockup-switch:
+    name: "Mockup Switch"
+    description: "Switch simulado para pruebas"
+    connection:
+      host: "localhost"
+      port: 8583
+      protocol: "TCP"
+      channel: "ASCIIChannel"
+      timeout: 30000
+    packager:
+      type: "GenericValidatingPackager"
+      config-file: "packagers/generic-packager.xml"
+    validation:
+      success-response-code: "00"
+      response-field: 39

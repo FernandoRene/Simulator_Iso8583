@@ -1,0 +1,17 @@
+{
+  "groups": [
+    {
+      "name": "simulator",
+      "type": "com.iso8583.simulator.core.config.SwitchConfiguration",
+      "sourceType": "com.iso8583.simulator.core.config.SwitchConfiguration"
+    }
+  ],
+  "properties": [
+    {
+      "name": "simulator.switches",
+      "type": "java.util.Map<java.lang.String,com.iso8583.simulator.core.config.SwitchConfiguration$SwitchConfig>",
+      "sourceType": "com.iso8583.simulator.core.config.SwitchConfiguration"
+    }
+  ],
+  "hints": []
+}
