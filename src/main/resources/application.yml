@@ -30,21 +30,48 @@ spring:
       max-file-size: 10MB
       max-request-size: 10MB
 
-# Configuración del simulador ISO8583
+# ================================
+# CONFIGURACIÓN DEL SIMULADOR ISO8583 CON SOPORTE MOCK/REAL
+# ================================
 iso8583:
   simulator:
+    # Modo de operación: mock, real, hybrid
+    mode: ${SIMULATOR_MODE:mock}
+
+    # Permitir cambio dinámico de modo en runtime
+    dynamic-mode-change: true
+
+    # Configuración del switch/autorizador (modo REAL)
     switch:
-      host: 172.16.1.211
-      port: 5105
-      timeout: 30000
+      host: ${AUTHORIZER_HOST:172.16.1.211}
+      port: ${AUTHORIZER_PORT:5105}
+      timeout: ${AUTHORIZER_TIMEOUT:30000}
+      enabled: true
+
       connection-pool:
         initial-size: 2
         max-size: 10
         max-idle-time: 300000
+
       retry:
         max-attempts: 3
         delay: 1000
 
+    # Configuración del modo MOCK
+    mock:
+      enabled: true
+      min-response-time: 50
+      max-response-time: 200
+      success-rate: 0.95
+      realistic-errors: true
+
+    # Configuración de conexión
+    connection:
+      keep-alive-interval: 60000
+      auto-reconnect: true
+      max-reconnect-attempts: 5
+
+    # Configuración de generación de campos
     field-generation:
       auto-generate-missing: true
       trace-number:
@@ -54,11 +81,13 @@ iso8583:
         auto-generate: true
         timezone: America/La_Paz
 
+    # Configuración de mensajes
     message:
       default-packager: generic-packager.xml
       validate-before-send: true
       log-messages: true
 
+    # Configuración de monitoreo
     monitoring:
       enabled: true
       metrics-interval: 60000
@@ -72,8 +101,8 @@ logging:
     org.springframework: INFO
     org.springframework.web: DEBUG
   pattern:
-    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
-    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level [%X{mode:-UNKNOWN}] %logger{36} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level [%X{mode:-UNKNOWN}] %logger{36} - %msg%n"
   file:
     name: logs/iso8583-simulator.log
     max-size: 100MB
@@ -84,11 +113,13 @@ management:
   endpoints:
     web:
       exposure:
-        include: health,info,metrics,prometheus
+        include: health,info,metrics,prometheus,configprops
       base-path: /actuator
   endpoint:
     health:
       show-details: always
+    configprops:
+      show-values: when-authorized
   metrics:
     export:
       prometheus:
@@ -101,10 +132,13 @@ springdoc:
   swagger-ui:
     path: /swagger-ui.html
     operationsSorter: method
+    tagsSorter: alpha
   show-actuator: true
 
 ---
-# Perfil de desarrollo
+# ================================
+# PERFIL DE DESARROLLO
+# ================================
 spring:
   config:
     activate:
@@ -112,42 +146,35 @@ spring:
 
 iso8583:
   simulator:
+    mode: mock  # Modo mock por defecto en desarrollo
+    dynamic-mode-change: true
+
     switch:
-      host: localhost
-      port: 8583
+      host: 172.16.1.211
+      port: 5105
+      timeout: 10000
+
+    mock:
+      enabled: true
+      min-response-time: 30
+      max-response-time: 100
+      success-rate: 0.98
+
     message:
       log-messages: true
+
     monitoring:
       enabled: true
 
 logging:
   level:
     com.iso8583.simulator: DEBUG
+    org.springframework.web: DEBUG
 
 ---
-# Perfil de producción
-spring:
-  config:
-    activate:
-      on-profile: prod
-
-iso8583:
-  simulator:
-    switch:
-      host: 172.16.1.211
-      port: 5105
-    message:
-      log-messages: false
-    monitoring:
-      enabled: true
-
-logging:
-  level:
-    com.iso8583.simulator: INFO
-    root: WARN
-
----
-# Perfil de testing
+# ================================
+# PERFIL DE TESTING
+# ================================
 spring:
   config:
     activate:
@@ -155,13 +182,107 @@ spring:
 
 iso8583:
   simulator:
+    mode: mock  # Solo mock en testing
+    dynamic-mode-change: false  # No permitir cambios en testing
+
     switch:
       host: localhost
       port: 8583
+      timeout: 5000
+
+    mock:
+      enabled: true
+      min-response-time: 10
+      max-response-time: 50
+      success-rate: 1.0  # 100% éxito en tests
+
     message:
-      log-messages: true
+      log-messages: false  # Menos logs en testing
+      validate-before-send: true
+
     monitoring:
       enabled: false
+
+logging:
+  level:
+    com.iso8583.simulator: INFO
+    org.springframework: WARN
+
+---
+# ================================
+# PERFIL DE PRODUCCIÓN
+# ================================
+spring:
+  config:
+    activate:
+      on-profile: prod
+
+iso8583:
+  simulator:
+    mode: real  # Modo real por defecto en producción
+    dynamic-mode-change: true  # Permitir cambio para mantenimiento
+
+    switch:
+      host: 172.16.1.211
+      port: 5105
+      timeout: 30000
+      connection-pool:
+        initial-size: 5
+        max-size: 20
+        max-idle-time: 600000
+
+    mock:
+      enabled: true  # Mantener disponible para pruebas
+      min-response-time: 80
+      max-response-time: 300
+      success-rate: 0.95
+
+    message:
+      log-messages: false  # Menos logging en producción
+      validate-before-send: true
+
+    monitoring:
+      enabled: true
+      metrics-interval: 30000  # Métricas más frecuentes
+
+logging:
+  level:
+    com.iso8583.simulator: INFO
+    org.jpos: WARN
+    org.springframework: WARN
+    root: WARN
+
+---
+# ================================
+# PERFIL DE DEMOSTRACIÓN
+# ================================
+spring:
+  config:
+    activate:
+      on-profile: demo
+
+iso8583:
+  simulator:
+    mode: hybrid  # Modo híbrido para demos
+    dynamic-mode-change: true
+
+    switch:
+      host: demo.authorizer.com
+      port: 8583
+      timeout: 15000
+
+    mock:
+      enabled: true
+      min-response-time: 100
+      max-response-time: 500
+      success-rate: 0.90  # Algunos errores para mostrar manejo
+      realistic-errors: true
+
+    message:
+      log-messages: true
+
+    monitoring:
+      enabled: true
 
 logging:
   level:

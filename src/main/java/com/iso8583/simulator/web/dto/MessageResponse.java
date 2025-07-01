@@ -7,7 +7,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDateTime;
 import java.util.Map;
 
-@Schema(description = "Respuesta del simulador ISO8583")
+@Schema(description = "Respuesta del simulador ISO8583 con soporte Mock/Real")
 public class MessageResponse {
 
     @JsonProperty("success")
@@ -47,15 +47,29 @@ public class MessageResponse {
     @Schema(description = "Timestamp de la operación")
     private LocalDateTime timestamp;
 
-    // Constructors
-    public MessageResponse() {}
+    // ========================================
+    // NUEVOS CAMPOS PARA SOPORTE MOCK/REAL
+    // ========================================
 
-    public MessageResponse(boolean success) {
-        this.success = success;
+    @JsonProperty("mockMode")
+    @Schema(description = "Indica si la respuesta fue generada en modo mock")
+    private boolean mockMode;
+
+    @JsonProperty("connectionType")
+    @Schema(description = "Tipo de conexión utilizada: 'mock' o 'real'")
+    private String connectionType;
+
+    // Constructors
+    public MessageResponse() {
         this.timestamp = LocalDateTime.now();
     }
 
-    // Getters and Setters
+    public MessageResponse(boolean success) {
+        this();
+        this.success = success;
+    }
+
+    // Getters and Setters EXISTENTES
     public boolean isSuccess() {
         return success;
     }
@@ -128,6 +142,44 @@ public class MessageResponse {
         this.timestamp = timestamp;
     }
 
+    // ========================================
+    // NUEVOS GETTERS/SETTERS PARA MOCK/REAL
+    // ========================================
+
+    public boolean isMockMode() {
+        return mockMode;
+    }
+
+    public void setMockMode(boolean mockMode) {
+        this.mockMode = mockMode;
+        // Automaticamente actualizar connectionType
+        this.connectionType = mockMode ? "mock" : "real";
+    }
+
+    public String getConnectionType() {
+        return connectionType;
+    }
+
+    public void setConnectionType(String connectionType) {
+        this.connectionType = connectionType;
+    }
+
+    // ========================================
+    // MÉTODOS DE CONVENIENCIA
+    // ========================================
+
+    public boolean isApproved() {
+        return "00".equals(responseCode);
+    }
+
+    public boolean isDeclined() {
+        return responseCode != null && !"00".equals(responseCode);
+    }
+
+    public boolean hasError() {
+        return errorMessage != null && !errorMessage.trim().isEmpty();
+    }
+
     @Override
     public String toString() {
         return "MessageResponse{" +
@@ -137,6 +189,8 @@ public class MessageResponse {
                 ", responseMti='" + responseMti + '\'' +
                 ", responseCode='" + responseCode + '\'' +
                 ", responseTime=" + responseTime +
+                ", mockMode=" + mockMode +
+                ", connectionType='" + connectionType + '\'' +
                 ", timestamp=" + timestamp +
                 '}';
     }
