@@ -177,7 +177,7 @@
       "name": "iso8583.simulator.switch.timeout",
       "type": "java.lang.Integer",
       "sourceType": "com.iso8583.simulator.core.config.SimulatorConfiguration$SwitchConfig",
-      "defaultValue": 30000
+      "defaultValue": 60000
     },
     {
       "name": "simulator.switches",

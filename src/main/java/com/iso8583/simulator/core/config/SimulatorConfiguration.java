@@ -91,7 +91,7 @@ public class SimulatorConfiguration {
     public static class SwitchConfig {
         private String host = "172.16.1.211";
         private int port = 5105;
-        private int timeout = 30000;
+        private int timeout = 60000;
         private boolean enabled = true;
         private ConnectionPool connectionPool = new ConnectionPool();
         private Retry retry = new Retry();

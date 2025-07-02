@@ -21,5 +21,6 @@ D:\iso8583-simulator\src\main\java\com\iso8583\simulator\simulator\CSVDataLoader
 D:\iso8583-simulator\src\main\java\com\iso8583\simulator\core\enums\FieldGenerationType.java
 D:\iso8583-simulator\src\main\java\com\iso8583\simulator\core\enums\SimulatorMode.java
 D:\iso8583-simulator\src\main\java\com\iso8583\simulator\core\connection\ConnectionPool.java
+D:\iso8583-simulator\src\main\java\com\iso8583\simulator\web\controller\ConnectionController.java
 D:\iso8583-simulator\src\main\java\com\iso8583\simulator\core\config\ApplicationConfig.java
 D:\iso8583-simulator\src\main\java\com\iso8583\simulator\core\config\SwitchConfiguration.java

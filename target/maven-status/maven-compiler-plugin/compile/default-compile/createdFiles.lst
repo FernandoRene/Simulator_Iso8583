@@ -28,7 +28,9 @@ com\iso8583\simulator\core\connection\ConnectionManager.class
 com\iso8583\simulator\web\controller\RealConnectionController$BalanceInquiryRequest.class
 com\iso8583\simulator\core\config\SimulatorConfiguration$SwitchConfig$ConnectionPool.class
 com\iso8583\simulator\core\connection\ConnectionPool.class
+com\iso8583\simulator\core\connection\ConnectionManager$PendingRequest.class
 com\iso8583\simulator\simulator\LoadTestResult$ErrorSummary.class
+com\iso8583\simulator\web\controller\ConnectionController.class
 com\iso8583\simulator\web\service\SimulatorService.class
 com\iso8583\simulator\core\config\SwitchConfiguration$ConnectionConfig.class
 com\iso8583\simulator\simulator\ResponseGenerator.class
