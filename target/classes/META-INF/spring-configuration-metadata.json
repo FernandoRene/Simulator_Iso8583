@@ -9,37 +9,37 @@
       "name": "iso8583.simulator.connection",
       "type": "com.iso8583.simulator.core.config.SimulatorConfiguration$ConnectionConfig",
       "sourceType": "com.iso8583.simulator.core.config.SimulatorConfiguration",
-      "sourceMethod": "getConnection()"
+      "sourceMethod": "public com.iso8583.simulator.core.config.SimulatorConfiguration.ConnectionConfig getConnection() "
     },
     {
       "name": "iso8583.simulator.mock",
       "type": "com.iso8583.simulator.core.config.SimulatorConfiguration$MockConfig",
       "sourceType": "com.iso8583.simulator.core.config.SimulatorConfiguration",
-      "sourceMethod": "getMock()"
+      "sourceMethod": "public com.iso8583.simulator.core.config.SimulatorConfiguration.MockConfig getMock() "
     },
     {
       "name": "iso8583.simulator.monitoring",
       "type": "com.iso8583.simulator.core.config.SimulatorConfiguration$MonitoringConfig",
       "sourceType": "com.iso8583.simulator.core.config.SimulatorConfiguration",
-      "sourceMethod": "getMonitoring()"
+      "sourceMethod": "public com.iso8583.simulator.core.config.SimulatorConfiguration.MonitoringConfig getMonitoring() "
     },
     {
       "name": "iso8583.simulator.switch",
       "type": "com.iso8583.simulator.core.config.SimulatorConfiguration$SwitchConfig",
       "sourceType": "com.iso8583.simulator.core.config.SimulatorConfiguration",
-      "sourceMethod": "getSwitch()"
+      "sourceMethod": "public com.iso8583.simulator.core.config.SimulatorConfiguration.SwitchConfig getSwitch() "
     },
     {
       "name": "iso8583.simulator.switch.connection-pool",
       "type": "com.iso8583.simulator.core.config.SimulatorConfiguration$SwitchConfig$ConnectionPool",
       "sourceType": "com.iso8583.simulator.core.config.SimulatorConfiguration$SwitchConfig",
-      "sourceMethod": "getConnectionPool()"
+      "sourceMethod": "public com.iso8583.simulator.core.config.SimulatorConfiguration.SwitchConfig.ConnectionPool getConnectionPool() "
     },
     {
       "name": "iso8583.simulator.switch.retry",
       "type": "com.iso8583.simulator.core.config.SimulatorConfiguration$SwitchConfig$Retry",
       "sourceType": "com.iso8583.simulator.core.config.SimulatorConfiguration$SwitchConfig",
-      "sourceMethod": "getRetry()"
+      "sourceMethod": "public com.iso8583.simulator.core.config.SimulatorConfiguration.SwitchConfig.Retry getRetry() "
     },
     {
       "name": "simulator",
@@ -51,56 +51,47 @@
     {
       "name": "iso8583.simulator.connection.auto-reconnect",
       "type": "java.lang.Boolean",
-      "sourceType": "com.iso8583.simulator.core.config.SimulatorConfiguration$ConnectionConfig",
-      "defaultValue": true
+      "sourceType": "com.iso8583.simulator.core.config.SimulatorConfiguration$ConnectionConfig"
     },
     {
       "name": "iso8583.simulator.connection.keep-alive-interval",
       "type": "java.lang.Integer",
-      "sourceType": "com.iso8583.simulator.core.config.SimulatorConfiguration$ConnectionConfig",
-      "defaultValue": 60000
+      "sourceType": "com.iso8583.simulator.core.config.SimulatorConfiguration$ConnectionConfig"
     },
     {
       "name": "iso8583.simulator.connection.max-reconnect-attempts",
       "type": "java.lang.Integer",
-      "sourceType": "com.iso8583.simulator.core.config.SimulatorConfiguration$ConnectionConfig",
-      "defaultValue": 5
+      "sourceType": "com.iso8583.simulator.core.config.SimulatorConfiguration$ConnectionConfig"
     },
     {
       "name": "iso8583.simulator.dynamic-mode-change",
       "type": "java.lang.Boolean",
-      "sourceType": "com.iso8583.simulator.core.config.SimulatorConfiguration",
-      "defaultValue": true
+      "sourceType": "com.iso8583.simulator.core.config.SimulatorConfiguration"
     },
     {
       "name": "iso8583.simulator.mock.enabled",
       "type": "java.lang.Boolean",
-      "sourceType": "com.iso8583.simulator.core.config.SimulatorConfiguration$MockConfig",
-      "defaultValue": true
+      "sourceType": "com.iso8583.simulator.core.config.SimulatorConfiguration$MockConfig"
     },
     {
       "name": "iso8583.simulator.mock.max-response-time",
       "type": "java.lang.Integer",
-      "sourceType": "com.iso8583.simulator.core.config.SimulatorConfiguration$MockConfig",
-      "defaultValue": 200
+      "sourceType": "com.iso8583.simulator.core.config.SimulatorConfiguration$MockConfig"
     },
     {
       "name": "iso8583.simulator.mock.min-response-time",
       "type": "java.lang.Integer",
-      "sourceType": "com.iso8583.simulator.core.config.SimulatorConfiguration$MockConfig",
-      "defaultValue": 50
+      "sourceType": "com.iso8583.simulator.core.config.SimulatorConfiguration$MockConfig"
     },
     {
       "name": "iso8583.simulator.mock.realistic-errors",
       "type": "java.lang.Boolean",
-      "sourceType": "com.iso8583.simulator.core.config.SimulatorConfiguration$MockConfig",
-      "defaultValue": true
+      "sourceType": "com.iso8583.simulator.core.config.SimulatorConfiguration$MockConfig"
     },
     {
       "name": "iso8583.simulator.mock.success-rate",
       "type": "java.lang.Double",
-      "sourceType": "com.iso8583.simulator.core.config.SimulatorConfiguration$MockConfig",
-      "defaultValue": 0.95
+      "sourceType": "com.iso8583.simulator.core.config.SimulatorConfiguration$MockConfig"
     },
     {
       "name": "iso8583.simulator.mode",
@@ -110,74 +101,62 @@
     {
       "name": "iso8583.simulator.monitoring.enabled",
       "type": "java.lang.Boolean",
-      "sourceType": "com.iso8583.simulator.core.config.SimulatorConfiguration$MonitoringConfig",
-      "defaultValue": true
+      "sourceType": "com.iso8583.simulator.core.config.SimulatorConfiguration$MonitoringConfig"
     },
     {
       "name": "iso8583.simulator.monitoring.metrics-interval",
       "type": "java.lang.Long",
-      "sourceType": "com.iso8583.simulator.core.config.SimulatorConfiguration$MonitoringConfig",
-      "defaultValue": 60000
+      "sourceType": "com.iso8583.simulator.core.config.SimulatorConfiguration$MonitoringConfig"
     },
     {
       "name": "iso8583.simulator.monitoring.performance-tracking",
       "type": "java.lang.Boolean",
-      "sourceType": "com.iso8583.simulator.core.config.SimulatorConfiguration$MonitoringConfig",
-      "defaultValue": true
+      "sourceType": "com.iso8583.simulator.core.config.SimulatorConfiguration$MonitoringConfig"
     },
     {
       "name": "iso8583.simulator.switch.connection-pool.initial-size",
       "type": "java.lang.Integer",
-      "sourceType": "com.iso8583.simulator.core.config.SimulatorConfiguration$SwitchConfig$ConnectionPool",
-      "defaultValue": 2
+      "sourceType": "com.iso8583.simulator.core.config.SimulatorConfiguration$SwitchConfig$ConnectionPool"
     },
     {
       "name": "iso8583.simulator.switch.connection-pool.max-idle-time",
       "type": "java.lang.Long",
-      "sourceType": "com.iso8583.simulator.core.config.SimulatorConfiguration$SwitchConfig$ConnectionPool",
-      "defaultValue": 300000
+      "sourceType": "com.iso8583.simulator.core.config.SimulatorConfiguration$SwitchConfig$ConnectionPool"
     },
     {
       "name": "iso8583.simulator.switch.connection-pool.max-size",
       "type": "java.lang.Integer",
-      "sourceType": "com.iso8583.simulator.core.config.SimulatorConfiguration$SwitchConfig$ConnectionPool",
-      "defaultValue": 10
+      "sourceType": "com.iso8583.simulator.core.config.SimulatorConfiguration$SwitchConfig$ConnectionPool"
     },
     {
       "name": "iso8583.simulator.switch.enabled",
       "type": "java.lang.Boolean",
-      "sourceType": "com.iso8583.simulator.core.config.SimulatorConfiguration$SwitchConfig",
-      "defaultValue": true
+      "sourceType": "com.iso8583.simulator.core.config.SimulatorConfiguration$SwitchConfig"
     },
     {
       "name": "iso8583.simulator.switch.host",
       "type": "java.lang.String",
-      "sourceType": "com.iso8583.simulator.core.config.SimulatorConfiguration$SwitchConfig",
-      "defaultValue": "172.16.1.211"
+      "sourceType": "com.iso8583.simulator.core.config.SimulatorConfiguration$SwitchConfig"
     },
     {
       "name": "iso8583.simulator.switch.port",
       "type": "java.lang.Integer",
-      "sourceType": "com.iso8583.simulator.core.config.SimulatorConfiguration$SwitchConfig",
-      "defaultValue": 5105
+      "sourceType": "com.iso8583.simulator.core.config.SimulatorConfiguration$SwitchConfig"
     },
     {
       "name": "iso8583.simulator.switch.retry.delay",
       "type": "java.lang.Long",
-      "sourceType": "com.iso8583.simulator.core.config.SimulatorConfiguration$SwitchConfig$Retry",
-      "defaultValue": 1000
+      "sourceType": "com.iso8583.simulator.core.config.SimulatorConfiguration$SwitchConfig$Retry"
     },
     {
       "name": "iso8583.simulator.switch.retry.max-attempts",
       "type": "java.lang.Integer",
-      "sourceType": "com.iso8583.simulator.core.config.SimulatorConfiguration$SwitchConfig$Retry",
-      "defaultValue": 3
+      "sourceType": "com.iso8583.simulator.core.config.SimulatorConfiguration$SwitchConfig$Retry"
     },
     {
       "name": "iso8583.simulator.switch.timeout",
       "type": "java.lang.Integer",
-      "sourceType": "com.iso8583.simulator.core.config.SimulatorConfiguration$SwitchConfig",
-      "defaultValue": 60000
+      "sourceType": "com.iso8583.simulator.core.config.SimulatorConfiguration$SwitchConfig"
     },
     {
       "name": "simulator.switches",
