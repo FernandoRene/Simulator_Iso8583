@@ -816,4 +816,32 @@ public class ConnectionManager implements InitializingBean, DisposableBean {
         public int getPendingRequestsCount() { return pendingRequestsCount; }
         public void setPendingRequestsCount(int pendingRequestsCount) { this.pendingRequestsCount = pendingRequestsCount; }
     }
+    /**
+     * Método para ser usado por el nuevo TransactionService
+     * Mantiene compatibilidad con el método actual sendMessage()
+     */
+    public CompletableFuture<ISOMsg> sendTransactionMessage(ISOMsg request, String transactionType) throws ISOException {
+        // Log específico para el tipo de transacción
+        logger.info("📤 ENVIANDO {} - MTI: {}, STAN: {} [PSEUDO-MUX]",
+                transactionType, request.getMTI(), request.getString(11));
+
+        // Usar el método sendMessage existente (sin cambios)
+        return sendMessage(request);
+    }
+
+    /**
+     * Método utilitario para generar STAN secuencial
+     * Exponer el generador existente para uso en estrategias
+     */
+    public String generateSequentialStan() {
+        return generateStan(); // Usar el método privado existente
+    }
+
+    /**
+     * Método utilitario para generar RRN
+     * Exponer el generador existente para uso en estrategias
+     */
+    public String generateSequentialRrn() {
+        return generateRrn(); // Usar el método privado existente
+    }
 }

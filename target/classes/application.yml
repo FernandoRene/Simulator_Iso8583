@@ -93,10 +93,50 @@ iso8583:
       metrics-interval: 60000
       performance-tracking: true
 
-# Logging
+# ================================
+# CONFIGURACIÓN DEL STRATEGY PATTERN
+# ================================
+
+# Configuración de validaciones
+validation:
+  terminal-validation:
+    iso8583-format-validation: true        # Estructura del mensaje
+    field-length-validation: true          # Longitud de campos
+    required-fields-validation: true       # Campos obligatorios
+    character-set-validation: true         # Caracteres permitidos
+
+  business-validation:
+    pan-luhn-validation: false             # ❌ Lo hace el core
+    amount-limits-validation: false        # ❌ Lo hace el core
+    card-status-validation: false          # ❌ Lo hace el core
+
+# Configuración de transacciones
+transaction:
+  strategy:
+    enabled-types:
+      - BALANCE_INQUIRY
+      - CASH_ADVANCE
+      - PURCHASE
+      - TRANSFER
+      - AUTHORIZATION
+      - REVERSAL
+
+    default-currency: "068"                # Bolivia
+    default-country: "068"                 # Bolivia
+    default-acquiring-institution: "409911"
+
+    timeout-ms: 30000                      # 30 segundos
+    retry-attempts: 2
+
+# ================================
+# LOGGING
+# ================================
 logging:
   level:
     com.iso8583.simulator: DEBUG
+    com.iso8583.simulator.core.transaction: DEBUG
+    com.iso8583.simulator.web.controller.TransactionController: INFO
+    com.iso8583.simulator.web.service.TransactionService: INFO
     org.jpos: INFO
     org.springframework: INFO
     org.springframework.web: DEBUG
@@ -108,7 +148,9 @@ logging:
     max-size: 100MB
     max-history: 30
 
-# Actuator para monitoring
+# ================================
+# ACTUATOR Y DOCUMENTACIÓN
+# ================================
 management:
   endpoints:
     web:
@@ -125,7 +167,6 @@ management:
       prometheus:
         enabled: true
 
-# Documentación API
 springdoc:
   api-docs:
     path: /api-docs
@@ -180,6 +221,20 @@ spring:
     activate:
       on-profile: test
 
+validation:
+  terminal-validation:
+    iso8583-format-validation: true
+    field-length-validation: false        # Permitir campos mal formateados
+    required-fields-validation: false     # Permitir campos faltantes
+  business-validation:
+    pan-luhn-validation: false            # Permitir PANs inválidos
+    amount-limits-validation: false       # Permitir montos negativos/enormes
+
+transaction:
+  strategy:
+    timeout-ms: 10000                     # Timeout más corto para testing
+    retry-attempts: 1
+
 iso8583:
   simulator:
     mode: mock  # Solo mock en testing
@@ -207,6 +262,29 @@ logging:
   level:
     com.iso8583.simulator: INFO
     org.springframework: WARN
+
+---
+# ================================
+# PERFIL DE TESTING AVANZADO
+# ================================
+spring:
+  config:
+    activate:
+      on-profile: testing
+
+validation:
+  terminal-validation:
+    iso8583-format-validation: true
+    field-length-validation: false        # Permitir campos mal formateados
+    required-fields-validation: false     # Permitir campos faltantes
+  business-validation:
+    pan-luhn-validation: false            # Permitir PANs inválidos
+    amount-limits-validation: false       # Permitir montos negativos/enormes
+
+transaction:
+  strategy:
+    timeout-ms: 10000                     # Timeout más corto para testing
+    retry-attempts: 1
 
 ---
 # ================================
@@ -283,7 +361,3 @@ iso8583:
 
     monitoring:
       enabled: true
-
-logging:
-  level:
-    com.iso8583.simulator: DEBUG
