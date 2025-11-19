@@ -1,0 +1,164 @@
+{
+  "id": "purchase",
+  "name": "Purchase - Compra Estándar",
+  "description": "Template para transacciones de compra (Purchase) con tarjeta. Incluye campos comunes para pagos en comercios.",
+  "category": "PURCHASE",
+  "transactionType": "PURCHASE",
+  "processingCode": "000000",
+  "predefined": true,
+  "author": "System",
+  "fields": {
+    "0": {
+      "fieldNumber": 0,
+      "value": "0200",
+      "behavior": "STATIC",
+      "editable": false,
+      "description": "MTI para transacción financiera de compra"
+    },
+    "2": {
+      "fieldNumber": 2,
+      "value": "4218283014136073",
+      "behavior": "USER_INPUT",
+      "editable": true,
+      "description": "Número de tarjeta (PAN) - debe ser proporcionado por el usuario"
+    },
+    "3": {
+      "fieldNumber": 3,
+      "value": "000000",
+      "behavior": "STATIC",
+      "editable": false,
+      "description": "Processing Code para Purchase"
+    },
+    "4": {
+      "fieldNumber": 4,
+      "value": "000000010000",
+      "behavior": "USER_INPUT",
+      "editable": true,
+      "description": "Monto de la transacción en centavos (ejemplo: 100.00)"
+    },
+    "7": {
+      "fieldNumber": 7,
+      "value": "",
+      "behavior": "AUTO_GENERATE",
+      "editable": false,
+      "description": "Fecha y hora de transmisión - se genera automáticamente"
+    },
+    "11": {
+      "fieldNumber": 11,
+      "value": "",
+      "behavior": "AUTO_GENERATE",
+      "editable": false,
+      "description": "STAN - se genera automáticamente"
+    },
+    "12": {
+      "fieldNumber": 12,
+      "value": "",
+      "behavior": "AUTO_GENERATE",
+      "editable": false,
+      "description": "Hora local - se genera automáticamente"
+    },
+    "13": {
+      "fieldNumber": 13,
+      "value": "",
+      "behavior": "AUTO_GENERATE",
+      "editable": false,
+      "description": "Fecha local - se genera automáticamente"
+    },
+    "14": {
+      "fieldNumber": 14,
+      "value": "2709",
+      "behavior": "USER_INPUT",
+      "editable": true,
+      "description": "Fecha de vencimiento de la tarjeta (YYMM)"
+    },
+    "15": {
+      "fieldNumber": 15,
+      "value": "",
+      "behavior": "AUTO_GENERATE",
+      "editable": false,
+      "description": "Fecha de liquidación - se genera automáticamente"
+    },
+    "18": {
+      "fieldNumber": 18,
+      "value": "5999",
+      "behavior": "STATIC",
+      "editable": true,
+      "description": "Merchant Category Code - Comercio general"
+    },
+    "19": {
+      "fieldNumber": 19,
+      "value": "068",
+      "behavior": "STATIC",
+      "editable": false,
+      "description": "Código de país del adquirente (Bolivia)"
+    },
+    "22": {
+      "fieldNumber": 22,
+      "value": "051",
+      "behavior": "STATIC",
+      "editable": true,
+      "description": "POS Entry Mode - Chip + PIN"
+    },
+    "25": {
+      "fieldNumber": 25,
+      "value": "00",
+      "behavior": "STATIC",
+      "editable": true,
+      "description": "POS Condition Code - Normal"
+    },
+    "32": {
+      "fieldNumber": 32,
+      "value": "409911",
+      "behavior": "STATIC",
+      "editable": true,
+      "description": "Acquiring Institution ID"
+    },
+    "35": {
+      "fieldNumber": 35,
+      "value": "4218283014136073=27091011234567890",
+      "behavior": "USER_INPUT",
+      "editable": true,
+      "description": "Track 2 Data - debe coincidir con el PAN"
+    },
+    "37": {
+      "fieldNumber": 37,
+      "value": "",
+      "behavior": "AUTO_GENERATE",
+      "editable": false,
+      "description": "RRN - se genera automáticamente"
+    },
+    "41": {
+      "fieldNumber": 41,
+      "value": "TERM0001",
+      "behavior": "USER_INPUT",
+      "editable": true,
+      "description": "Terminal ID"
+    },
+    "42": {
+      "fieldNumber": 42,
+      "value": "MERCHANT000001",
+      "behavior": "USER_INPUT",
+      "editable": true,
+      "description": "Card Acceptor ID (Merchant ID)"
+    },
+    "43": {
+      "fieldNumber": 43,
+      "value": "Mi Comercio             La Paz       BO",
+      "behavior": "USER_INPUT",
+      "editable": true,
+      "description": "Nombre y ubicación del comercio"
+    },
+    "49": {
+      "fieldNumber": 49,
+      "value": "068",
+      "behavior": "STATIC",
+      "editable": false,
+      "description": "Código de moneda (BOB - Bolivianos)"
+    }
+  },
+  "metadata": {
+    "educationalNote": "Template básico para transacciones de compra. Los campos marcados como USER_INPUT deben ser proporcionados por el usuario.",
+    "usageScenario": "Usar para simular pagos con tarjeta en comercios físicos",
+    "requiredUserInputs": "PAN (campo 2), Amount (campo 4), Terminal ID (campo 41), Merchant ID (campo 42)"
+  }
+}
