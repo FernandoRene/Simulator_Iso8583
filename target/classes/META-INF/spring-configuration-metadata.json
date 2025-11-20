@@ -45,6 +45,23 @@
       "name": "simulator",
       "type": "com.iso8583.simulator.core.config.SwitchConfiguration",
       "sourceType": "com.iso8583.simulator.core.config.SwitchConfiguration"
+    },
+    {
+      "name": "validation",
+      "type": "com.iso8583.simulator.core.config.ValidationConfigService",
+      "sourceType": "com.iso8583.simulator.core.config.ValidationConfigService"
+    },
+    {
+      "name": "validation.business-validation",
+      "type": "com.iso8583.simulator.core.config.ValidationConfigService$BusinessValidation",
+      "sourceType": "com.iso8583.simulator.core.config.ValidationConfigService",
+      "sourceMethod": "getBusinessValidation()"
+    },
+    {
+      "name": "validation.terminal-validation",
+      "type": "com.iso8583.simulator.core.config.ValidationConfigService$TerminalValidation",
+      "sourceType": "com.iso8583.simulator.core.config.ValidationConfigService",
+      "sourceMethod": "getTerminalValidation()"
     }
   ],
   "properties": [
@@ -183,6 +200,48 @@
       "name": "simulator.switches",
       "type": "java.util.Map<java.lang.String,com.iso8583.simulator.core.config.SwitchConfiguration$SwitchConfig>",
       "sourceType": "com.iso8583.simulator.core.config.SwitchConfiguration"
+    },
+    {
+      "name": "validation.business-validation.amount-limits-validation",
+      "type": "java.lang.Boolean",
+      "sourceType": "com.iso8583.simulator.core.config.ValidationConfigService$BusinessValidation",
+      "defaultValue": false
+    },
+    {
+      "name": "validation.business-validation.card-status-validation",
+      "type": "java.lang.Boolean",
+      "sourceType": "com.iso8583.simulator.core.config.ValidationConfigService$BusinessValidation",
+      "defaultValue": false
+    },
+    {
+      "name": "validation.business-validation.pan-luhn-validation",
+      "type": "java.lang.Boolean",
+      "sourceType": "com.iso8583.simulator.core.config.ValidationConfigService$BusinessValidation",
+      "defaultValue": false
+    },
+    {
+      "name": "validation.terminal-validation.character-set-validation",
+      "type": "java.lang.Boolean",
+      "sourceType": "com.iso8583.simulator.core.config.ValidationConfigService$TerminalValidation",
+      "defaultValue": true
+    },
+    {
+      "name": "validation.terminal-validation.field-length-validation",
+      "type": "java.lang.Boolean",
+      "sourceType": "com.iso8583.simulator.core.config.ValidationConfigService$TerminalValidation",
+      "defaultValue": true
+    },
+    {
+      "name": "validation.terminal-validation.iso8583-format-validation",
+      "type": "java.lang.Boolean",
+      "sourceType": "com.iso8583.simulator.core.config.ValidationConfigService$TerminalValidation",
+      "defaultValue": true
+    },
+    {
+      "name": "validation.terminal-validation.required-fields-validation",
+      "type": "java.lang.Boolean",
+      "sourceType": "com.iso8583.simulator.core.config.ValidationConfigService$TerminalValidation",
+      "defaultValue": true
     }
   ],
   "hints": []

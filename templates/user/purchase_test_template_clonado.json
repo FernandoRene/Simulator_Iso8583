@@ -1,0 +1,204 @@
+{
+  "id" : "purchase_test_template_clonado",
+  "name" : "Purchase Test Template - Clonado",
+  "description" : "Copia de: Template para autorizaciones de transacciones originadas en el exterior (MTI 0100).",
+  "category" : "AUTHORIZATION",
+  "transactionType" : "AUTHORIZATION",
+  "processingCode" : "000000",
+  "fields" : {
+    "0" : {
+      "fieldNumber" : 0,
+      "value" : "0100",
+      "behavior" : "STATIC",
+      "generationRule" : null,
+      "editable" : false,
+      "description" : "MTI para Authorization Request"
+    },
+    "32" : {
+      "fieldNumber" : 32,
+      "value" : "492150",
+      "behavior" : "USER_INPUT",
+      "generationRule" : null,
+      "editable" : true,
+      "description" : "Acquiring Institution ID (exterior)"
+    },
+    "2" : {
+      "fieldNumber" : 2,
+      "value" : "4218283014136073",
+      "behavior" : "USER_INPUT",
+      "generationRule" : null,
+      "editable" : true,
+      "description" : "Número de tarjeta (PAN)"
+    },
+    "3" : {
+      "fieldNumber" : 3,
+      "value" : "000000",
+      "behavior" : "USER_INPUT",
+      "generationRule" : null,
+      "editable" : true,
+      "description" : "Processing Code (compra o retiro ATM)"
+    },
+    "4" : {
+      "fieldNumber" : 4,
+      "value" : "000000010000",
+      "behavior" : "USER_INPUT",
+      "generationRule" : null,
+      "editable" : true,
+      "description" : "Monto de la transacción"
+    },
+    "37" : {
+      "fieldNumber" : 37,
+      "value" : "",
+      "behavior" : "AUTO_GENERATE",
+      "generationRule" : null,
+      "editable" : false,
+      "description" : "RRN"
+    },
+    "6" : {
+      "fieldNumber" : 6,
+      "value" : "000000001200",
+      "behavior" : "OPTIONAL",
+      "generationRule" : null,
+      "editable" : true,
+      "description" : "Monto de facturación (si difiere del campo 4)"
+    },
+    "7" : {
+      "fieldNumber" : 7,
+      "value" : "",
+      "behavior" : "AUTO_GENERATE",
+      "generationRule" : null,
+      "editable" : false,
+      "description" : "Fecha y hora de transmisión"
+    },
+    "41" : {
+      "fieldNumber" : 41,
+      "value" : "EXT00001",
+      "behavior" : "USER_INPUT",
+      "generationRule" : null,
+      "editable" : true,
+      "description" : "Terminal ID"
+    },
+    "42" : {
+      "fieldNumber" : 42,
+      "value" : "MERCHANT123456",
+      "behavior" : "USER_INPUT",
+      "generationRule" : null,
+      "editable" : true,
+      "description" : "Card Acceptor ID"
+    },
+    "11" : {
+      "fieldNumber" : 11,
+      "value" : "",
+      "behavior" : "AUTO_GENERATE",
+      "generationRule" : null,
+      "editable" : false,
+      "description" : "STAN"
+    },
+    "43" : {
+      "fieldNumber" : 43,
+      "value" : "Amazon.com              Seattle      US",
+      "behavior" : "USER_INPUT",
+      "generationRule" : null,
+      "editable" : true,
+      "description" : "Nombre y ubicación del comercio"
+    },
+    "12" : {
+      "fieldNumber" : 12,
+      "value" : "",
+      "behavior" : "AUTO_GENERATE",
+      "generationRule" : null,
+      "editable" : false,
+      "description" : "Hora local"
+    },
+    "13" : {
+      "fieldNumber" : 13,
+      "value" : "",
+      "behavior" : "AUTO_GENERATE",
+      "generationRule" : null,
+      "editable" : false,
+      "description" : "Fecha local"
+    },
+    "14" : {
+      "fieldNumber" : 14,
+      "value" : "2709",
+      "behavior" : "USER_INPUT",
+      "generationRule" : null,
+      "editable" : true,
+      "description" : "Fecha de vencimiento"
+    },
+    "15" : {
+      "fieldNumber" : 15,
+      "value" : "",
+      "behavior" : "AUTO_GENERATE",
+      "generationRule" : null,
+      "editable" : false,
+      "description" : "Fecha de liquidación"
+    },
+    "49" : {
+      "fieldNumber" : 49,
+      "value" : "840",
+      "behavior" : "USER_INPUT",
+      "generationRule" : null,
+      "editable" : true,
+      "description" : "Código de moneda de transacción (USD típicamente)"
+    },
+    "18" : {
+      "fieldNumber" : 18,
+      "value" : "5999",
+      "behavior" : "USER_INPUT",
+      "generationRule" : null,
+      "editable" : true,
+      "description" : "Merchant Category Code"
+    },
+    "19" : {
+      "fieldNumber" : 19,
+      "value" : "840",
+      "behavior" : "USER_INPUT",
+      "generationRule" : null,
+      "editable" : true,
+      "description" : "País del adquirente (exterior)"
+    },
+    "51" : {
+      "fieldNumber" : 51,
+      "value" : "068",
+      "behavior" : "OPTIONAL",
+      "generationRule" : null,
+      "editable" : true,
+      "description" : "Código de moneda de facturación (BOB)"
+    },
+    "22" : {
+      "fieldNumber" : 22,
+      "value" : "010",
+      "behavior" : "USER_INPUT",
+      "generationRule" : null,
+      "editable" : true,
+      "description" : "POS Entry Mode (manual para e-commerce típicamente)"
+    },
+    "25" : {
+      "fieldNumber" : 25,
+      "value" : "08",
+      "behavior" : "STATIC",
+      "generationRule" : null,
+      "editable" : true,
+      "description" : "POS Condition Code - E-commerce"
+    },
+    "62" : {
+      "fieldNumber" : 62,
+      "value" : "!B0881000007!H000",
+      "behavior" : "OPTIONAL",
+      "generationRule" : null,
+      "editable" : true,
+      "description" : "Datos privados del adquirente"
+    }
+  },
+  "metadata" : {
+    "usageScenario" : "Simular compras en el exterior o transacciones e-commerce internacionales",
+    "educationalNote" : "Template para autorizaciones del exterior. MTI 0100 en vez de 0200.",
+    "requiredUserInputs" : "PAN, Amount, País de adquirente, Moneda"
+  },
+  "predefined" : false,
+  "createdAt" : [ 2025, 11, 19, 5, 40, 14, 845552200 ],
+  "updatedAt" : [ 2025, 11, 19, 5, 40, 14, 845552200 ],
+  "author" : "System",
+  "usageCount" : 0
+}

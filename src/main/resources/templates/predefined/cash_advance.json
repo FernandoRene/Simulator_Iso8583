@@ -1,0 +1,171 @@
+{
+  "id": "cash_advance",
+  "name": "Cash Advance - Avance de Efectivo",
+  "description": "Template para transacciones de avance de efectivo en cajeros automáticos o ventanilla bancaria.",
+  "category": "CASH_ADVANCE",
+  "transactionType": "CASH_ADVANCE",
+  "processingCode": "011099",
+  "predefined": true,
+  "author": "System",
+  "fields": {
+    "0": {
+      "fieldNumber": 0,
+      "value": "0200",
+      "behavior": "STATIC",
+      "editable": false,
+      "description": "MTI para transacción financiera"
+    },
+    "2": {
+      "fieldNumber": 2,
+      "value": "4218283014136073",
+      "behavior": "USER_INPUT",
+      "editable": true,
+      "description": "Número de tarjeta (PAN)"
+    },
+    "3": {
+      "fieldNumber": 3,
+      "value": "011099",
+      "behavior": "STATIC",
+      "editable": false,
+      "description": "Processing Code para Cash Advance"
+    },
+    "4": {
+      "fieldNumber": 4,
+      "value": "000000020000",
+      "behavior": "USER_INPUT",
+      "editable": true,
+      "description": "Monto del avance en centavos (ejemplo: 200.00)"
+    },
+    "7": {
+      "fieldNumber": 7,
+      "value": "",
+      "behavior": "AUTO_GENERATE",
+      "editable": false,
+      "description": "Fecha y hora de transmisión"
+    },
+    "11": {
+      "fieldNumber": 11,
+      "value": "",
+      "behavior": "AUTO_GENERATE",
+      "editable": false,
+      "description": "STAN"
+    },
+    "12": {
+      "fieldNumber": 12,
+      "value": "",
+      "behavior": "AUTO_GENERATE",
+      "editable": false,
+      "description": "Hora local"
+    },
+    "13": {
+      "fieldNumber": 13,
+      "value": "",
+      "behavior": "AUTO_GENERATE",
+      "editable": false,
+      "description": "Fecha local"
+    },
+    "14": {
+      "fieldNumber": 14,
+      "value": "2709",
+      "behavior": "USER_INPUT",
+      "editable": true,
+      "description": "Fecha de vencimiento (YYMM)"
+    },
+    "15": {
+      "fieldNumber": 15,
+      "value": "",
+      "behavior": "AUTO_GENERATE",
+      "editable": false,
+      "description": "Fecha de liquidación"
+    },
+    "18": {
+      "fieldNumber": 18,
+      "value": "6011",
+      "behavior": "STATIC",
+      "editable": false,
+      "description": "Merchant Type - ATM/Cash Advance"
+    },
+    "19": {
+      "fieldNumber": 19,
+      "value": "068",
+      "behavior": "STATIC",
+      "editable": false,
+      "description": "País del adquirente (Bolivia)"
+    },
+    "22": {
+      "fieldNumber": 22,
+      "value": "051",
+      "behavior": "STATIC",
+      "editable": true,
+      "description": "POS Entry Mode - Chip + PIN"
+    },
+    "25": {
+      "fieldNumber": 25,
+      "value": "02",
+      "behavior": "STATIC",
+      "editable": false,
+      "description": "POS Condition Code"
+    },
+    "32": {
+      "fieldNumber": 32,
+      "value": "409911",
+      "behavior": "STATIC",
+      "editable": true,
+      "description": "Acquiring Institution ID"
+    },
+    "35": {
+      "fieldNumber": 35,
+      "value": "4218283014136073=27091011234567890",
+      "behavior": "USER_INPUT",
+      "editable": true,
+      "description": "Track 2 Data"
+    },
+    "37": {
+      "fieldNumber": 37,
+      "value": "",
+      "behavior": "AUTO_GENERATE",
+      "editable": false,
+      "description": "RRN"
+    },
+    "41": {
+      "fieldNumber": 41,
+      "value": "ATM00001",
+      "behavior": "USER_INPUT",
+      "editable": true,
+      "description": "Terminal ID (ATM)"
+    },
+    "42": {
+      "fieldNumber": 42,
+      "value": "BANK0000000001",
+      "behavior": "USER_INPUT",
+      "editable": true,
+      "description": "Card Acceptor ID"
+    },
+    "43": {
+      "fieldNumber": 43,
+      "value": "ATM Banco Central       La Paz       BO",
+      "behavior": "USER_INPUT",
+      "editable": true,
+      "description": "Ubicación del ATM"
+    },
+    "49": {
+      "fieldNumber": 49,
+      "value": "068",
+      "behavior": "STATIC",
+      "editable": false,
+      "description": "Código de moneda (BOB)"
+    },
+    "102": {
+      "fieldNumber": 102,
+      "value": "1234567890",
+      "behavior": "OPTIONAL",
+      "editable": true,
+      "description": "Número de cuenta (opcional)"
+    }
+  },
+  "metadata": {
+    "educationalNote": "Template para avances de efectivo en ATM o ventanilla. Típicamente requiere PIN.",
+    "usageScenario": "Simular retiros de efectivo en cajeros automáticos",
+    "requiredUserInputs": "PAN, Amount, Terminal ID"
+  }
+}

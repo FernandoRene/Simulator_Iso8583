@@ -1,0 +1,32 @@
+{
+  "id" : "test-swagger-003",
+  "name" : "Test Swagger Template",
+  "description" : "Template de prueba",
+  "category" : "CUSTOM",
+  "transactionType" : "PURCHASE",
+  "processingCode" : "000000",
+  "fields" : {
+    "0" : {
+      "fieldNumber" : 0,
+      "value" : "0200",
+      "behavior" : "STATIC",
+      "generationRule" : null,
+      "editable" : true,
+      "description" : null
+    },
+    "2" : {
+      "fieldNumber" : 2,
+      "value" : "4218283014136073",
+      "behavior" : "STATIC",
+      "generationRule" : null,
+      "editable" : true,
+      "description" : null
+    }
+  },
+  "metadata" : { },
+  "predefined" : false,
+  "createdAt" : [ 2025, 11, 19, 6, 22, 42, 75858000 ],
+  "updatedAt" : [ 2025, 11, 19, 6, 22, 42, 75858000 ],
+  "author" : null,
+  "usageCount" : 0
+}
