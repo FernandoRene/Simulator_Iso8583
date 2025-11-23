@@ -1,0 +1,200 @@
+{
+  "id" : "compra-por-internet",
+  "name" : "Compra por internet",
+  "description" : "Compra por internet en comercio nacional",
+  "category" : "CUSTOM",
+  "transactionType" : "CUSTOM",
+  "processingCode" : "000000",
+  "fields" : {
+    "0" : {
+      "fieldNumber" : 0,
+      "value" : "0100",
+      "behavior" : "STATIC",
+      "generationRule" : null,
+      "editable" : true,
+      "description" : null
+    },
+    "2" : {
+      "fieldNumber" : 2,
+      "value" : "4218283014136073",
+      "behavior" : "STATIC",
+      "generationRule" : null,
+      "editable" : true,
+      "description" : null
+    },
+    "3" : {
+      "fieldNumber" : 3,
+      "value" : "000000",
+      "behavior" : "STATIC",
+      "generationRule" : null,
+      "editable" : true,
+      "description" : null
+    },
+    "4" : {
+      "fieldNumber" : 4,
+      "value" : "000000009800",
+      "behavior" : "STATIC",
+      "generationRule" : null,
+      "editable" : true,
+      "description" : null
+    },
+    "6" : {
+      "fieldNumber" : 6,
+      "value" : "000000001458",
+      "behavior" : "STATIC",
+      "generationRule" : null,
+      "editable" : true,
+      "description" : null
+    },
+    "7" : {
+      "fieldNumber" : 7,
+      "value" : "0611041342",
+      "behavior" : "STATIC",
+      "generationRule" : null,
+      "editable" : true,
+      "description" : null
+    },
+    "11" : {
+      "fieldNumber" : 11,
+      "value" : "963912",
+      "behavior" : "STATIC",
+      "generationRule" : null,
+      "editable" : true,
+      "description" : null
+    },
+    "12" : {
+      "fieldNumber" : 12,
+      "value" : "001343",
+      "behavior" : "STATIC",
+      "generationRule" : null,
+      "editable" : true,
+      "description" : null
+    },
+    "13" : {
+      "fieldNumber" : 13,
+      "value" : "0611",
+      "behavior" : "STATIC",
+      "generationRule" : null,
+      "editable" : true,
+      "description" : null
+    },
+    "14" : {
+      "fieldNumber" : 14,
+      "value" : "2903",
+      "behavior" : "STATIC",
+      "generationRule" : null,
+      "editable" : true,
+      "description" : null
+    },
+    "15" : {
+      "fieldNumber" : 15,
+      "value" : "0611",
+      "behavior" : "STATIC",
+      "generationRule" : null,
+      "editable" : true,
+      "description" : null
+    },
+    "18" : {
+      "fieldNumber" : 18,
+      "value" : "5814",
+      "behavior" : "STATIC",
+      "generationRule" : null,
+      "editable" : true,
+      "description" : null
+    },
+    "19" : {
+      "fieldNumber" : 19,
+      "value" : "068",
+      "behavior" : "STATIC",
+      "generationRule" : null,
+      "editable" : true,
+      "description" : null
+    },
+    "22" : {
+      "fieldNumber" : 22,
+      "value" : "010",
+      "behavior" : "STATIC",
+      "generationRule" : null,
+      "editable" : true,
+      "description" : null
+    },
+    "25" : {
+      "fieldNumber" : 25,
+      "value" : "08",
+      "behavior" : "STATIC",
+      "generationRule" : null,
+      "editable" : true,
+      "description" : null
+    },
+    "32" : {
+      "fieldNumber" : 32,
+      "value" : "492150",
+      "behavior" : "STATIC",
+      "generationRule" : null,
+      "editable" : true,
+      "description" : null
+    },
+    "37" : {
+      "fieldNumber" : 37,
+      "value" : "516104963912",
+      "behavior" : "STATIC",
+      "generationRule" : null,
+      "editable" : true,
+      "description" : null
+    },
+    "41" : {
+      "fieldNumber" : 41,
+      "value" : "00447416",
+      "behavior" : "STATIC",
+      "generationRule" : null,
+      "editable" : true,
+      "description" : null
+    },
+    "42" : {
+      "fieldNumber" : 42,
+      "value" : "447416         ",
+      "behavior" : "STATIC",
+      "generationRule" : null,
+      "editable" : true,
+      "description" : null
+    },
+    "43" : {
+      "fieldNumber" : 43,
+      "value" : "PedidosYa                5566556655   BO",
+      "behavior" : "STATIC",
+      "generationRule" : null,
+      "editable" : true,
+      "description" : null
+    },
+    "49" : {
+      "fieldNumber" : 49,
+      "value" : "068",
+      "behavior" : "STATIC",
+      "generationRule" : null,
+      "editable" : true,
+      "description" : null
+    },
+    "51" : {
+      "fieldNumber" : 51,
+      "value" : "840",
+      "behavior" : "STATIC",
+      "generationRule" : null,
+      "editable" : true,
+      "description" : null
+    },
+    "62" : {
+      "fieldNumber" : 62,
+      "value" : "!B0881000007!H000",
+      "behavior" : "STATIC",
+      "generationRule" : null,
+      "editable" : true,
+      "description" : null
+    }
+  },
+  "metadata" : { },
+  "predefined" : false,
+  "createdAt" : [ 2025, 11, 22, 3, 47, 4, 208991300 ],
+  "updatedAt" : [ 2025, 11, 23, 3, 4, 58, 848114600 ],
+  "author" : null,
+  "usageCount" : 7
+}

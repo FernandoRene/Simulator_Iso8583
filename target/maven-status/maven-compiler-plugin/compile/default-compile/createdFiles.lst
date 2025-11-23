@@ -27,11 +27,13 @@ com\iso8583\simulator\simulator\LoadTestResult$ErrorSummary.class
 com\iso8583\simulator\web\controller\TransactionController.class
 com\iso8583\simulator\web\service\SimulatorService.class
 com\iso8583\simulator\core\config\SwitchConfiguration$ConnectionConfig.class
+com\iso8583\simulator\core\packager\ISOFixedFieldPreserveSpaces.class
 com\iso8583\simulator\simulator\ResponseGenerator.class
 com\iso8583\simulator\api\controller\FieldEditorController$FieldValidationRequest.class
 com\iso8583\simulator\core\transaction\TransactionType.class
 com\iso8583\simulator\core\message\FieldGenerator$1.class
 com\iso8583\simulator\core\config\SimulatorConfiguration$MonitoringConfig.class
+com\iso8583\simulator\core\packager\ISOFieldPreserveSpaces.class
 com\iso8583\simulator\core\config\SwitchConfiguration$ValidationConfig.class
 com\iso8583\simulator\core\field\model\FieldMetadata$FieldType.class
 com\iso8583\simulator\core\template\model\TemplateField.class
@@ -48,6 +50,7 @@ com\iso8583\simulator\core\template\model\TemplateField$FieldBehavior.class
 com\iso8583\simulator\api\controller\PackagerTestController$DecodeResult.class
 com\iso8583\simulator\core\field\FieldMetadataService.class
 com\iso8583\simulator\core\config\SimulatorConfiguration$SwitchConfig.class
+com\iso8583\simulator\core\packager\IFA_FIXED_SPACES.class
 com\iso8583\simulator\core\transaction\model\TransactionRequest.class
 com\iso8583\simulator\simulator\LoadTestResult.class
 com\iso8583\simulator\core\field\FieldEditorService$BatchEditResult.class

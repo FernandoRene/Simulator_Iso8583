@@ -1,0 +1,41 @@
+[
+  {
+    "name": "Defectos de Producto",
+    "matchedStatuses": ["failed"],
+    "messageRegex": ".*AssertionError.*"
+  },
+  {
+    "name": "Errores de Conexión",
+    "matchedStatuses": ["broken"],
+    "messageRegex": ".*(Connection|Socket|Timeout).*"
+  },
+  {
+    "name": "Problemas de Parsing",
+    "matchedStatuses": ["broken"],
+    "messageRegex": ".*(Parse|Packager|ISOException).*"
+  },
+  {
+    "name": "Validaciones Fallidas",
+    "matchedStatuses": ["failed"],
+    "messageRegex": ".*(Validation|Invalid|Expected).*"
+  },
+  {
+    "name": "Errores de Autorizador",
+    "matchedStatuses": ["failed"],
+    "messageRegex": ".*(Response Code|Authorization).*"
+  },
+  {
+    "name": "Tests Ignorados",
+    "matchedStatuses": ["skipped"]
+  },
+  {
+    "name": "Errores de Infraestructura",
+    "matchedStatuses": ["broken"],
+    "messageRegex": ".*(500|Internal Server Error|System).*"
+  },
+  {
+    "name": "Problemas de Configuración",
+    "matchedStatuses": ["broken"],
+    "messageRegex": ".*(Configuration|Setup|Properties).*"
+  }
+]

@@ -26,6 +26,7 @@ D:\iso8583-simulator\src\main\java\com\iso8583\simulator\core\field\FieldEditorS
 D:\iso8583-simulator\src\main\java\com\iso8583\simulator\core\parser\model\ParseResult.java
 D:\iso8583-simulator\src\main\java\com\iso8583\simulator\core\config\SimulatorConfiguration.java
 D:\iso8583-simulator\src\main\java\com\iso8583\simulator\core\packager\PackagerService.java
+D:\iso8583-simulator\src\main\java\com\iso8583\simulator\core\packager\ISOFieldPreserveSpaces.java
 D:\iso8583-simulator\src\main\java\com\iso8583\simulator\core\transaction\model\TransactionTypeDetails.java
 D:\iso8583-simulator\src\main\java\com\iso8583\simulator\core\enums\ResponseCode.java
 D:\iso8583-simulator\src\main\java\com\iso8583\simulator\core\field\model\FieldGenerationRequest.java
@@ -70,4 +71,6 @@ D:\iso8583-simulator\src\main\java\com\iso8583\simulator\core\parser\ISOMessageP
 D:\iso8583-simulator\src\main\java\com\iso8583\simulator\core\connection\ConnectionPool.java
 D:\iso8583-simulator\src\main\java\com\iso8583\simulator\core\packager\IFA_CHAR_TRIMMED.java
 D:\iso8583-simulator\src\main\java\com\iso8583\simulator\core\config\ApplicationConfig.java
+D:\iso8583-simulator\src\main\java\com\iso8583\simulator\core\packager\ISOFixedFieldPreserveSpaces.java
+D:\iso8583-simulator\src\main\java\com\iso8583\simulator\core\packager\IFA_FIXED_SPACES.java
 D:\iso8583-simulator\src\main\java\com\iso8583\simulator\core\transaction\strategy\impl\PurchaseStrategy.java

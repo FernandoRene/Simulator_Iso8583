@@ -219,12 +219,12 @@
             id="42"
             length="15"
             name="CARD ACCEPTOR IDENTIFICATION CODE"
-            class="org.jpos.iso.IFA_NUMERIC"/>
+            class="com.iso8583.simulator.core.packager.IFA_FIXED_SPACES"/>
     <isofield
             id="43"
             length="40"
             name="CARD ACCEPTOR NAME/LOCATION"
-            class="org.jpos.iso.IFA_LLCHAR"/>
+            class="com.iso8583.simulator.core.packager.IFA_FIXED_SPACES"/>
     <isofield
             id="44"
             length="25"

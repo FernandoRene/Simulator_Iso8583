@@ -49,7 +49,7 @@ public class ISOMessageParserController {
 
         try {
             String rawMessage = request.get("message");
-            String packagerName = request.getOrDefault("packager", "linkser"); // Default Linkser
+            String packagerName = request.getOrDefault("packager", "iso87ascii"); // Default Linkser
 
             if (rawMessage == null || rawMessage.isEmpty()) {
                 return ResponseEntity.badRequest()
