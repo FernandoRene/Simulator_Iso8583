@@ -3,8 +3,10 @@ switches:
     name: "Core Bancario"
     description: "Configuración para el autorizador principal"
     connection:
-      host: "172.16.1.211"
-      port: 5105
+      host: "localhost"
+      port: 9000
+#      host: "172.16.1.211"
+#      port: 5105
       protocol: "TCP"
       channel: "ASCIIChannel"
       timeout: 60000

@@ -1,14 +1,14 @@
 {
-  "id" : "purchase-ecommerce",
-  "name" : "Purchase ecommerce",
-  "description" : "Transacción de compra por internet",
+  "id" : "digital-signature",
+  "name" : "Digital Signature",
+  "description" : "Firma digital Creditos Electronicos",
   "category" : "CUSTOM",
   "transactionType" : "CUSTOM",
-  "processingCode" : "000000",
+  "processingCode" : "353410",
   "fields" : {
     "0" : {
       "fieldNumber" : 0,
-      "value" : "0100",
+      "value" : "0200",
       "behavior" : "STATIC",
       "generationRule" : null,
       "editable" : true,
@@ -16,7 +16,7 @@
     },
     "2" : {
       "fieldNumber" : 2,
-      "value" : "4218283014136073",
+      "value" : "4218281000000001",
       "behavior" : "STATIC",
       "generationRule" : null,
       "editable" : true,
@@ -24,23 +24,7 @@
     },
     "3" : {
       "fieldNumber" : 3,
-      "value" : "000000",
-      "behavior" : "STATIC",
-      "generationRule" : null,
-      "editable" : true,
-      "description" : null
-    },
-    "4" : {
-      "fieldNumber" : 4,
-      "value" : "000000009800",
-      "behavior" : "STATIC",
-      "generationRule" : null,
-      "editable" : true,
-      "description" : null
-    },
-    "6" : {
-      "fieldNumber" : 6,
-      "value" : "000000001458",
+      "value" : "353410",
       "behavior" : "STATIC",
       "generationRule" : null,
       "editable" : true,
@@ -48,7 +32,7 @@
     },
     "7" : {
       "fieldNumber" : 7,
-      "value" : "0611041342",
+      "value" : "0630204655",
       "behavior" : "STATIC",
       "generationRule" : null,
       "editable" : true,
@@ -56,7 +40,7 @@
     },
     "11" : {
       "fieldNumber" : 11,
-      "value" : "963912",
+      "value" : "002313",
       "behavior" : "STATIC",
       "generationRule" : null,
       "editable" : true,
@@ -64,7 +48,7 @@
     },
     "12" : {
       "fieldNumber" : 12,
-      "value" : "001343",
+      "value" : "164655",
       "behavior" : "STATIC",
       "generationRule" : null,
       "editable" : true,
@@ -72,7 +56,7 @@
     },
     "13" : {
       "fieldNumber" : 13,
-      "value" : "0611",
+      "value" : "0630",
       "behavior" : "STATIC",
       "generationRule" : null,
       "editable" : true,
@@ -80,7 +64,7 @@
     },
     "14" : {
       "fieldNumber" : 14,
-      "value" : "2903",
+      "value" : "3012",
       "behavior" : "STATIC",
       "generationRule" : null,
       "editable" : true,
@@ -88,7 +72,7 @@
     },
     "15" : {
       "fieldNumber" : 15,
-      "value" : "0611",
+      "value" : "0630",
       "behavior" : "STATIC",
       "generationRule" : null,
       "editable" : true,
@@ -96,7 +80,7 @@
     },
     "18" : {
       "fieldNumber" : 18,
-      "value" : "5814",
+      "value" : "6011",
       "behavior" : "STATIC",
       "generationRule" : null,
       "editable" : true,
@@ -112,7 +96,7 @@
     },
     "22" : {
       "fieldNumber" : 22,
-      "value" : "010",
+      "value" : "001",
       "behavior" : "STATIC",
       "generationRule" : null,
       "editable" : true,
@@ -120,7 +104,7 @@
     },
     "25" : {
       "fieldNumber" : 25,
-      "value" : "08",
+      "value" : "02",
       "behavior" : "STATIC",
       "generationRule" : null,
       "editable" : true,
@@ -128,7 +112,15 @@
     },
     "32" : {
       "fieldNumber" : 32,
-      "value" : "492150",
+      "value" : "409911",
+      "behavior" : "STATIC",
+      "generationRule" : null,
+      "editable" : true,
+      "description" : null
+    },
+    "35" : {
+      "fieldNumber" : 35,
+      "value" : "4218281000000001=3012226",
       "behavior" : "STATIC",
       "generationRule" : null,
       "editable" : true,
@@ -136,7 +128,7 @@
     },
     "37" : {
       "fieldNumber" : 37,
-      "value" : "516104963912",
+      "value" : "518120002313",
       "behavior" : "STATIC",
       "generationRule" : null,
       "editable" : true,
@@ -144,7 +136,7 @@
     },
     "41" : {
       "fieldNumber" : 41,
-      "value" : "00447416",
+      "value" : "28917578",
       "behavior" : "STATIC",
       "generationRule" : null,
       "editable" : true,
@@ -152,7 +144,7 @@
     },
     "42" : {
       "fieldNumber" : 42,
-      "value" : "447416         ",
+      "value" : "0829773AT578   ",
       "behavior" : "STATIC",
       "generationRule" : null,
       "editable" : true,
@@ -160,7 +152,7 @@
     },
     "43" : {
       "fieldNumber" : 43,
-      "value" : "PedidosYa                5566556655   BO",
+      "value" : "578 LAB NCR BNA          SANTA CRUZ   BO",
       "behavior" : "STATIC",
       "generationRule" : null,
       "editable" : true,
@@ -174,17 +166,9 @@
       "editable" : true,
       "description" : null
     },
-    "51" : {
-      "fieldNumber" : 51,
-      "value" : "840",
-      "behavior" : "STATIC",
-      "generationRule" : null,
-      "editable" : true,
-      "description" : null
-    },
     "62" : {
       "fieldNumber" : 62,
-      "value" : "!B0881000007!H000",
+      "value" : "!D0860038385!E041234",
       "behavior" : "STATIC",
       "generationRule" : null,
       "editable" : true,
@@ -193,8 +177,8 @@
   },
   "metadata" : { },
   "predefined" : false,
-  "createdAt" : [ 2025, 11, 23, 2, 56, 0, 480859200 ],
-  "updatedAt" : [ 2025, 11, 28, 2, 35, 16, 703311300 ],
+  "createdAt" : [ 2025, 11, 25, 2, 11, 35, 642348200 ],
+  "updatedAt" : [ 2025, 11, 28, 2, 39, 21, 564942300 ],
   "author" : null,
-  "usageCount" : 18
+  "usageCount" : 3
 }

@@ -219,12 +219,12 @@
             id="42"
             length="15"
             name="CARD ACCEPTOR IDENTIFICATION CODE"
-            class="com.iso8583.simulator.core.packager.IFA_FIXED_SPACES"/>
+            class="org.jpos.iso.IF_CHAR"/>
     <isofield
             id="43"
             length="40"
             name="CARD ACCEPTOR NAME/LOCATION"
-            class="com.iso8583.simulator.core.packager.IFA_FIXED_SPACES"/>
+            class="org.jpos.iso.IF_CHAR"/>
     <isofield
             id="44"
             length="25"
@@ -267,9 +267,9 @@
             class="org.jpos.iso.IF_CHAR"/>
     <isofield
             id="52"
-            length="64"
+            length="16"
             name="PIN DATA"
-            class="org.jpos.iso.IFA_BINARY"/>
+            class="org.jpos.iso.IF_CHAR"/>
     <isofield
             id="53"
             length="16"
@@ -307,9 +307,9 @@
             class="org.jpos.iso.IFA_LLLCHAR"/>
     <isofield
             id="60"
-            length="999"
+            length="99"
             name="RESERVED PRIVATE"
-            class="org.jpos.iso.IFA_LLLCHAR"/>
+            class="org.jpos.iso.IFA_LLCHAR"/>
     <isofield
             id="61"
             length="999"

@@ -149,9 +149,9 @@ iso8583:
     mode: mock  # Modo mock por defecto en desarrollo
     dynamic-mode-change: true
 
-    switch:
-      host: 172.16.1.211
-      port: 5105
+    switch:  # Pruebas conexiòn
+      host: localhost
+      port: 9000
       timeout: 10000
 
     mock:

@@ -1,7 +1,7 @@
 {
-  "id" : "purchase-ecommerce",
-  "name" : "Purchase ecommerce",
-  "description" : "Transacción de compra por internet",
+  "id" : "purchase-local-entry-mode-chip",
+  "name" : "Purchase Local Entry Mode Chip",
+  "description" : "Compra en comercio Local con lectura de chip",
   "category" : "CUSTOM",
   "transactionType" : "CUSTOM",
   "processingCode" : "000000",
@@ -16,7 +16,7 @@
     },
     "2" : {
       "fieldNumber" : 2,
-      "value" : "4218283014136073",
+      "value" : "4218282011046798",
       "behavior" : "STATIC",
       "generationRule" : null,
       "editable" : true,
@@ -32,7 +32,7 @@
     },
     "4" : {
       "fieldNumber" : 4,
-      "value" : "000000009800",
+      "value" : "000000016000",
       "behavior" : "STATIC",
       "generationRule" : null,
       "editable" : true,
@@ -40,7 +40,7 @@
     },
     "6" : {
       "fieldNumber" : 6,
-      "value" : "000000001458",
+      "value" : "000000002379",
       "behavior" : "STATIC",
       "generationRule" : null,
       "editable" : true,
@@ -48,7 +48,7 @@
     },
     "7" : {
       "fieldNumber" : 7,
-      "value" : "0611041342",
+      "value" : "0422095559",
       "behavior" : "STATIC",
       "generationRule" : null,
       "editable" : true,
@@ -56,7 +56,7 @@
     },
     "11" : {
       "fieldNumber" : 11,
-      "value" : "963912",
+      "value" : "020461",
       "behavior" : "STATIC",
       "generationRule" : null,
       "editable" : true,
@@ -64,7 +64,7 @@
     },
     "12" : {
       "fieldNumber" : 12,
-      "value" : "001343",
+      "value" : "095600",
       "behavior" : "STATIC",
       "generationRule" : null,
       "editable" : true,
@@ -72,15 +72,7 @@
     },
     "13" : {
       "fieldNumber" : 13,
-      "value" : "0611",
-      "behavior" : "STATIC",
-      "generationRule" : null,
-      "editable" : true,
-      "description" : null
-    },
-    "14" : {
-      "fieldNumber" : 14,
-      "value" : "2903",
+      "value" : "0422",
       "behavior" : "STATIC",
       "generationRule" : null,
       "editable" : true,
@@ -88,7 +80,7 @@
     },
     "15" : {
       "fieldNumber" : 15,
-      "value" : "0611",
+      "value" : "0422",
       "behavior" : "STATIC",
       "generationRule" : null,
       "editable" : true,
@@ -96,7 +88,7 @@
     },
     "18" : {
       "fieldNumber" : 18,
-      "value" : "5814",
+      "value" : "5541",
       "behavior" : "STATIC",
       "generationRule" : null,
       "editable" : true,
@@ -112,7 +104,7 @@
     },
     "22" : {
       "fieldNumber" : 22,
-      "value" : "010",
+      "value" : "051",
       "behavior" : "STATIC",
       "generationRule" : null,
       "editable" : true,
@@ -120,7 +112,7 @@
     },
     "25" : {
       "fieldNumber" : 25,
-      "value" : "08",
+      "value" : "00",
       "behavior" : "STATIC",
       "generationRule" : null,
       "editable" : true,
@@ -128,7 +120,15 @@
     },
     "32" : {
       "fieldNumber" : 32,
-      "value" : "492150",
+      "value" : "416686",
+      "behavior" : "STATIC",
+      "generationRule" : null,
+      "editable" : true,
+      "description" : null
+    },
+    "35" : {
+      "fieldNumber" : 35,
+      "value" : "4218282011046798D28032261117644200000",
       "behavior" : "STATIC",
       "generationRule" : null,
       "editable" : true,
@@ -136,7 +136,7 @@
     },
     "37" : {
       "fieldNumber" : 37,
-      "value" : "516104963912",
+      "value" : "511209020461",
       "behavior" : "STATIC",
       "generationRule" : null,
       "editable" : true,
@@ -144,7 +144,7 @@
     },
     "41" : {
       "fieldNumber" : 41,
-      "value" : "00447416",
+      "value" : "06008601",
       "behavior" : "STATIC",
       "generationRule" : null,
       "editable" : true,
@@ -152,7 +152,7 @@
     },
     "42" : {
       "fieldNumber" : 42,
-      "value" : "447416         ",
+      "value" : "000000207969   ",
       "behavior" : "STATIC",
       "generationRule" : null,
       "editable" : true,
@@ -160,7 +160,7 @@
     },
     "43" : {
       "fieldNumber" : 43,
-      "value" : "PedidosYa                5566556655   BO",
+      "value" : "SURTIDORES UNITOURS      MALLASA      BO",
       "behavior" : "STATIC",
       "generationRule" : null,
       "editable" : true,
@@ -182,9 +182,25 @@
       "editable" : true,
       "description" : null
     },
+    "52" : {
+      "fieldNumber" : 52,
+      "value" : "71B913ECFC6A5F44",
+      "behavior" : "STATIC",
+      "generationRule" : null,
+      "editable" : true,
+      "description" : null
+    },
+    "60" : {
+      "fieldNumber" : 60,
+      "value" : "000000000001",
+      "behavior" : "STATIC",
+      "generationRule" : null,
+      "editable" : true,
+      "description" : null
+    },
     "62" : {
       "fieldNumber" : 62,
-      "value" : "!B0881000007!H000",
+      "value" : "!A09    2   2!B0805001000!H000",
       "behavior" : "STATIC",
       "generationRule" : null,
       "editable" : true,
@@ -193,8 +209,8 @@
   },
   "metadata" : { },
   "predefined" : false,
-  "createdAt" : [ 2025, 11, 23, 2, 56, 0, 480859200 ],
-  "updatedAt" : [ 2025, 11, 28, 2, 35, 16, 703311300 ],
+  "createdAt" : [ 2025, 11, 24, 2, 45, 41, 426321200 ],
+  "updatedAt" : [ 2025, 11, 28, 2, 34, 3, 908240700 ],
   "author" : null,
-  "usageCount" : 18
+  "usageCount" : 3
 }
