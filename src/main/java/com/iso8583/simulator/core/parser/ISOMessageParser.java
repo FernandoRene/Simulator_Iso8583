@@ -120,11 +120,16 @@ public class ISOMessageParser {
         ISOMsg msg = new ISOMsg();
         msg.setPackager(packager);
 
+        for (Map.Entry<String, String> entry : fieldMap.entrySet()) {
+            System.out.println("Clave: " + entry.getKey() + ", Valor: " + entry.getValue());
+        }
+
         try {
             // Establecer MTI
-            String mti = fieldMap.get("mti");
+            String mti = fieldMap.get("0");
+            logger.warn("⚠️ Campo mti capturado: {}", mti);
             if (mti == null || mti.isEmpty()) {
-                throw new ISOException("MTI es obligatorio");
+                throw new ISOException("MTI es obligatorio revision log");
             }
             msg.setMTI(mti);
 

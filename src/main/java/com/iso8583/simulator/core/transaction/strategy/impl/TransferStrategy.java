@@ -4,12 +4,16 @@ import com.iso8583.simulator.core.transaction.strategy.TransactionStrategy;
 import com.iso8583.simulator.core.transaction.model.TransactionRequest;
 import com.iso8583.simulator.core.transaction.model.TransactionResponse;
 import com.iso8583.simulator.core.transaction.model.ValidationResult;
+import com.iso8583.simulator.web.controller.TransactionController;
 import org.jpos.iso.ISOException;
 import org.jpos.iso.ISOMsg;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Map;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Estrategia para transacciones de Transfer (4 tipos de transferencias)
@@ -17,6 +21,8 @@ import java.time.format.DateTimeFormatter;
  */
 @Component
 public class TransferStrategy implements TransactionStrategy {
+
+    private static final Logger logger = LoggerFactory.getLogger(TransactionController.class);
 
     @Override
     public String getTransactionType() {
@@ -33,27 +39,33 @@ public class TransferStrategy implements TransactionStrategy {
         ISOMsg msg = new ISOMsg();
         msg.setMTI("0200"); // Financial Transaction Request
 
+        Map<String, String> additionalFields = request.getAdditionalFields();
+
         // Campos obligatorios para transferencias
         msg.set(2, request.getPan());
-        msg.set(3, determineProcessingCode(request)); // Processing Code variable según tipo
+        msg.set(3, getFieldOrDefault(additionalFields, "3", determineProcessingCode(request)));
         msg.set(4, formatAmount(request.getAmount()));
+
+        // Campos de fecha/hora SIEMPRE se regeneran (seguridad)
         msg.set(7, getCurrentTransmissionDateTime());
-        msg.set(11, generateStan());
         msg.set(12, getCurrentTime());
         msg.set(13, getCurrentDate());
-        msg.set(14, extractExpiryFromTrack2(request.getTrack2()));
-        msg.set(15, getCurrentDate()); // Settlement date
-        msg.set(18, "6011"); // Merchant Category Code para transferencias
-        msg.set(19, "068"); // Acquiring Institution Country Code (Bolivia)
-        msg.set(22, "021"); // POS Entry Mode (Manual/Default)
-        msg.set(25, "02"); // POS Condition Code
-        msg.set(32, "409911"); // Acquiring Institution ID
+        msg.set(15, getCurrentDate());
+
+        // Campos que pueden venir de additionalFields o se generan
+        msg.set(11, getFieldOrGenerate(additionalFields, "11", this::generateStan));
+        msg.set(14, getFieldOrExtract(additionalFields, "14", () -> extractExpiryFromTrack2(request.getTrack2())));
+        msg.set(18, getFieldOrDefault(additionalFields, "18", "6011"));
+        msg.set(19, getFieldOrDefault(additionalFields, "19", "068"));
+        msg.set(22, getFieldOrDefault(additionalFields, "22", "021"));
+        msg.set(25, getFieldOrDefault(additionalFields, "25", "02"));
+        msg.set(32, getFieldOrDefault(additionalFields, "32", "409911"));
         msg.set(35, request.getTrack2());
-        msg.set(37, generateRrn());
+        msg.set(37, getFieldOrGenerate(additionalFields, "37", this::generateRrn));
         msg.set(41, request.getTerminalId());
         msg.set(42, request.getCardAcceptorId());
-        msg.set(43, request.getCardAcceptorName());
-        msg.set(49, request.getCurrencyCode());
+        msg.set(43, getFieldOrDefault(additionalFields, "43", request.getCardAcceptorName()));
+        msg.set(49, getFieldOrDefault(additionalFields, "49", request.getCurrencyCode()));
 
         // Campos específicos para transferencias
         if (request.getAccount() != null) {
@@ -63,6 +75,26 @@ public class TransferStrategy implements TransactionStrategy {
         // Campo 103 - Cuenta/banco destino (específico por tipo de transferencia)
         if (request.getTargetAccount() != null) {
             msg.set(103, request.getTargetAccount());
+        }
+
+        // 🆕 AGREGAR TODOS LOS CAMPOS ADICIONALES QUE NO ESTÁN YA SETEADOS
+        if (additionalFields != null && !additionalFields.isEmpty()) {
+            for (Map.Entry<String, String> entry : additionalFields.entrySet()) {
+                try {
+                    int fieldNumber = Integer.parseInt(entry.getKey());
+
+                    // No sobrescribir campos críticos de seguridad
+                    if (fieldNumber != 7 && fieldNumber != 12 && fieldNumber != 13 && fieldNumber != 15) {
+                        // Solo setear si no fue seteado antes
+                        if (!msg.hasField(fieldNumber)) {
+                            msg.set(fieldNumber, entry.getValue());
+                            logger.debug("Campo adicional {} agregado: {}", fieldNumber, entry.getValue());
+                        }
+                    }
+                } catch (NumberFormatException e) {
+                    logger.warn("Campo adicional ignorado (no numérico): {}", entry.getKey());
+                }
+            }
         }
 
         return msg;
@@ -286,5 +318,45 @@ public class TransferStrategy implements TransactionStrategy {
         }
 
         return rrn;
+    }
+
+    // 🆕 MÉTODOS HELPER PARA TEMPLATES
+
+    /**
+     * Obtiene campo de additionalFields o usa valor por defecto
+     */
+    private String getFieldOrDefault(Map<String, String> additionalFields, String fieldNumber, String defaultValue) {
+        if (additionalFields != null && additionalFields.containsKey(fieldNumber)) {
+            String value = additionalFields.get(fieldNumber);
+            logger.debug("Usando campo {} desde additionalFields: {}", fieldNumber, value);
+            return value;
+        }
+        return defaultValue;
+    }
+
+    /**
+     * Obtiene campo de additionalFields o genera usando función
+     */
+    private String getFieldOrGenerate(Map<String, String> additionalFields, String fieldNumber, java.util.function.Supplier<String> generator) {
+        if (additionalFields != null && additionalFields.containsKey(fieldNumber)) {
+            String value = additionalFields.get(fieldNumber);
+            logger.debug("Usando campo {} desde additionalFields: {}", fieldNumber, value);
+            return value;
+        }
+        String generated = generator.get();
+        logger.debug("Generando campo {}: {}", fieldNumber, generated);
+        return generated;
+    }
+
+    /**
+     * Obtiene campo de additionalFields o extrae de otro campo
+     */
+    private String getFieldOrExtract(Map<String, String> additionalFields, String fieldNumber, java.util.function.Supplier<String> extractor) {
+        if (additionalFields != null && additionalFields.containsKey(fieldNumber)) {
+            String value = additionalFields.get(fieldNumber);
+            logger.debug("Usando campo {} desde additionalFields: {}", fieldNumber, value);
+            return value;
+        }
+        return extractor.get();
     }
 }

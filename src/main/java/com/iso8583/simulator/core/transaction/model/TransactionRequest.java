@@ -21,6 +21,7 @@ public class TransactionRequest {
     private String account;
     private String pin;
     private Map<String, String> additionalFields;
+    private String cashbackAmount;  // Campo 54 - Cashback amount
 
     // Campos nuevos para Transfer y Authorization
     private String processingCode;          // Campo 3 - Processing Code
@@ -262,6 +263,9 @@ public class TransactionRequest {
     public String getPrivateUseFields() { return privateUseFields; }
     public void setPrivateUseFields(String privateUseFields) { this.privateUseFields = privateUseFields; }
 
+    public String getCashbackAmount() { return cashbackAmount; }
+    public void setCashbackAmount(String cashbackAmount) { this.cashbackAmount = cashbackAmount; }
+
     // ============================================================================
     // MÉTODOS UTILITARIOS
     // ============================================================================
@@ -295,4 +299,5 @@ public class TransactionRequest {
     public String getDefaultCountryCode() {
         return acquiringCountry != null ? acquiringCountry : "068";
     }
+
 }

@@ -18,7 +18,8 @@ public class TransactionResponse {
     private String rrn;
     private long responseTime;
     private LocalDateTime timestamp;
-    private Map<String, String> fields;
+    private Map<String, String> fields;  // Campos del RESPONSE
+    private Map<String, String> requestFields;  // 🆕 Campos del REQUEST completo
     private boolean successful;
 
     // Inicializar listas para evitar NullPointerException
@@ -42,14 +43,23 @@ public class TransactionResponse {
         // Mensaje descriptivo
         transResponse.responseMessage = getResponseMessage(code);
 
-        // Extraer todos los campos para debugging
-        Map<String, String> allFields = new HashMap<>();
-        for (int i = 1; i <= 128; i++) {
-            if (response.hasField(i)) {
-                allFields.put(String.valueOf(i), response.getString(i));
+        // 🆕 Extraer TODOS los campos del REQUEST
+        Map<String, String> allRequestFields = new HashMap<>();
+        for (int i = 0; i <= 128; i++) {
+            if (request.hasField(i)) {
+                allRequestFields.put(String.valueOf(i), request.getString(i));
             }
         }
-        transResponse.fields = allFields;
+        transResponse.requestFields = allRequestFields;
+
+        // Extraer todos los campos del RESPONSE para debugging
+        Map<String, String> allResponseFields = new HashMap<>();
+        for (int i = 1; i <= 128; i++) {
+            if (response.hasField(i)) {
+                allResponseFields.put(String.valueOf(i), response.getString(i));
+            }
+        }
+        transResponse.fields = allResponseFields;
 
         return transResponse;
     }
@@ -118,6 +128,10 @@ public class TransactionResponse {
 
     public Map<String, String> getFields() { return fields; }
     public void setFields(Map<String, String> fields) { this.fields = fields; }
+
+    // 🆕 Getter/Setter para requestFields
+    public Map<String, String> getRequestFields() { return requestFields; }
+    public void setRequestFields(Map<String, String> requestFields) { this.requestFields = requestFields; }
 
     public boolean isSuccessful() { return successful; }
     public void setSuccessful(boolean successful) { this.successful = successful; }
