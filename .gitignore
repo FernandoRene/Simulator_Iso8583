@@ -4,6 +4,13 @@
 # Log file
 *.log
 
+# Log compreso
+*.gz
+
+# Compilados
+target/
+.idea/
+
 # BlueJ files
 *.ctxt
 
