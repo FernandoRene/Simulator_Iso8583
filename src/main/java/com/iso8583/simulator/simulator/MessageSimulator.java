@@ -104,6 +104,14 @@ public class MessageSimulator {
             copyFieldIfPresent(request, response, 41); // Terminal ID
             copyFieldIfPresent(request, response, 42); // Merchant ID
 
+            // CAMPOS PARA DEPOSIT Y CASHBACK:
+            copyFieldIfPresent(request, response, 6);   // Additional Amounts (Cashback)
+            copyFieldIfPresent(request, response, 51);  // Currency Code - Cardholder Billing
+            copyFieldIfPresent(request, response, 52);  // PIN Data
+            copyFieldIfPresent(request, response, 54);  // Additional Amounts (Cashback amount)
+            copyFieldIfPresent(request, response, 62);  // Private Data
+            copyFieldIfPresent(request, response, 103); // Account Identification 2 (Deposit)
+
             // **LÓGICA PERSONALIZABLE DE CÓDIGOS DE RESPUESTA**
             String responseCode = determineResponseCode(request);
             response.set(39, responseCode); // Response Code
@@ -122,6 +130,14 @@ public class MessageSimulator {
                 if ("0200".equals(requestMti) && !"301099".equals(request.getString(3))) {
                     response.set(54, "000C000000010000"); // Additional Amounts
                 }
+
+                // campo 54 si NO existe (para no sobrescribir cashback)
+                if ("0200".equals(requestMti) && !"301099".equals(request.getString(3))) {
+                    if (!response.hasField(54)) {  // ✅ Solo si no existe
+                        response.set(54, "000C000000010000"); // Additional Amounts
+                    }
+                }
+
             } else {
                 // Transacción rechazada - no agregar authorization code
                 logger.debug("Transacción rechazada simulada con código: {} - {}",
@@ -131,6 +147,9 @@ public class MessageSimulator {
             // Fecha/hora de transmisión actualizada
             String currentDateTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("MMddHHmmss"));
             response.set(7, currentDateTime);
+
+            // 🆕 AGREGAR: Campo 0 con MTI de response
+            response.set(0, responseMti);
 
             logger.debug("Respuesta mock creada - MTI: {} -> {}, Response Code: {}, STAN: {}",
                     requestMti, responseMti, responseCode, response.getString(11));
@@ -359,16 +378,28 @@ public class MessageSimulator {
 
     // Métodos existentes sin cambios...
     private String getResponseMti(String requestMti) {
-        switch (requestMti) {
+        // Primero intentar extraer el MTI numérico si viene en formato texto
+        String numericMti = requestMti;
+        if (requestMti.contains("_")) {
+            // Extraer la parte numérica de "FINANCIAL_REQUEST_0200" → "0200"
+            String[] parts = requestMti.split("_");
+            if (parts.length > 0) {
+                numericMti = parts[parts.length - 1];
+            }
+        }
+
+        switch (numericMti) {
             case "0200": return "0210";
+            case "0100": return "0110";
             case "0400": return "0410";
             case "0800": return "0810";
             default:
                 try {
-                    int mti = Integer.parseInt(requestMti);
+                    int mti = Integer.parseInt(numericMti);
                     return String.format("%04d", mti + 10);
                 } catch (NumberFormatException e) {
-                    return "0010";
+                    logger.warn("No se pudo parsear MTI: {}, usando 0210 por defecto", requestMti);
+                    return "0210"; // Default más común
                 }
         }
     }

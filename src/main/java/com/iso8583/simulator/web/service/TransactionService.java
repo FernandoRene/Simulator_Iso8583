@@ -5,6 +5,7 @@ import com.iso8583.simulator.core.transaction.factory.TransactionStrategyFactory
 import com.iso8583.simulator.core.transaction.strategy.TransactionStrategy;
 import com.iso8583.simulator.core.transaction.model.*;
 import com.iso8583.simulator.core.config.ValidationConfigService;
+import org.jpos.iso.ISOException;
 import org.jpos.iso.ISOMsg;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,11 +43,16 @@ public class TransactionService {
     public CompletableFuture<TransactionResponse> processTransaction(TransactionRequest request) {
         return CompletableFuture.supplyAsync(() -> {
             try {
-                logger.info("🔄 Procesando transacción: {} para PAN: {}...{}",
+                logger.info("📄 Procesando transacción: {} para PAN: {}...{}",
                         request.getTransactionType(),
                         request.getPan().substring(0, 6),
                         request.getPan().substring(request.getPan().length()-4)
                 );
+
+                // 🆕 Detectar transacciones CUSTOM (sin strategy)
+                if ("CUSTOM".equalsIgnoreCase(request.getTransactionType())) {
+                    return processCustomTransaction(request);
+                }
 
                 // 1. Obtener estrategia para el tipo de transacción
                 TransactionStrategy strategy = strategyFactory.getStrategy(request.getTransactionType());
@@ -66,7 +72,7 @@ public class TransactionService {
                 // 3. Construir mensaje ISO 8583
                 ISOMsg isoRequest = strategy.buildMessage(request);
 
-                logger.info("📝 Mensaje construido - MTI: {}, Processing Code: {}, STAN: {}",
+                logger.info("📤 Mensaje construido - MTI: {}, Processing Code: {}, STAN: {}",
                         isoRequest.getMTI(), isoRequest.getString(3), isoRequest.getString(11));
 
                 // 4. Enviar al core bancario usando ConnectionManager existente
@@ -89,6 +95,67 @@ public class TransactionService {
                 return TransactionResponse.systemError(e.getMessage());
             }
         });
+    }
+
+    /**
+     * 🆕 Procesa transacciones CUSTOM sin usar Strategy
+     * Crea mensaje ISO8583 directamente desde additionalFields
+     */
+    private TransactionResponse processCustomTransaction(TransactionRequest request) throws ISOException {
+        try {
+            Map<String, String> fields = request.getAdditionalFields();
+
+            logger.info("🔧 Procesando transacción CUSTOM con {} campos",
+                    fields != null ? fields.size() : 0);
+
+            // Validación básica
+            if (fields == null || fields.isEmpty()) {
+                return TransactionResponse.systemError("Transacción CUSTOM requiere additionalFields");
+            }
+
+            // 1. Crear mensaje ISO8583 desde additionalFields
+            ISOMsg isoRequest = new ISOMsg();
+
+            // Setear MTI (default 0200 si no viene en additionalFields)
+            String mti = fields.getOrDefault("0", "0200");
+            isoRequest.setMTI(mti);
+
+            // Setear todos los campos desde additionalFields
+            for (Map.Entry<String, String> entry : fields.entrySet()) {
+                try {
+                    int fieldNumber = Integer.parseInt(entry.getKey());
+                    if (fieldNumber > 0) { // Skip MTI (campo 0)
+                        isoRequest.set(fieldNumber, entry.getValue());
+                        logger.debug("Campo [{}] = {}", fieldNumber, entry.getValue());
+                    }
+                } catch (NumberFormatException e) {
+                    logger.warn("Campo no numérico ignorado: {}", entry.getKey());
+                }
+            }
+
+            logger.info("📤 CUSTOM - MTI: {}, Processing Code: {}, STAN: {}",
+                    isoRequest.getMTI(),
+                    isoRequest.getString(3),
+                    isoRequest.getString(11));
+
+            // 2. Enviar al autorizador
+            long startTime = System.currentTimeMillis();
+            ISOMsg isoResponse = connectionManager.sendMessage(isoRequest).get();
+            long responseTime = System.currentTimeMillis() - startTime;
+
+            // 3. Procesar respuesta (genérico, sin strategy)
+            TransactionResponse response = TransactionResponse.fromISOResponse(isoRequest, isoResponse, responseTime);
+            response.setResponseTime(responseTime);
+
+            logger.info("✅ CUSTOM completada - Code: {}, {}ms",
+                    response.getResponseCode(), responseTime);
+
+            return response;
+
+        } catch (Exception e) {
+            logger.error("❌ Error procesando transacción CUSTOM: {}", e.getMessage(), e);
+            return TransactionResponse.systemError("Error CUSTOM: " + e.getMessage());
+        }
     }
 
     /**

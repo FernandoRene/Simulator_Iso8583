@@ -1,5 +1,7 @@
 package com.iso8583.simulator.web.dto;
 
+import java.util.Map;
+
 /**
  * DTO para requests de Purchase desde el frontend
  */
@@ -50,4 +52,14 @@ public class PurchaseRequest {
 
     public String getCurrencyCode() { return currencyCode; }
     public void setCurrencyCode(String currencyCode) { this.currencyCode = currencyCode; }
+
+    private Map<String, String> additionalFields;
+
+    public Map<String, String> getAdditionalFields() {
+        return additionalFields;
+    }
+
+    public void setAdditionalFields(Map<String, String> additionalFields) {
+        this.additionalFields = additionalFields;
+    }
 }

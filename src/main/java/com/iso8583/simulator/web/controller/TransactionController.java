@@ -134,7 +134,7 @@ public class TransactionController {
     public CompletableFuture<ResponseEntity<TransactionResponse>> purchase(
             @RequestBody PurchaseRequest request) {
 
-        logger.info("ðŸ“¤ Purchase request - PAN: {}...{}, Amount: {}",
+        logger.info("📤 Purchase request - PAN: {}...{}, Amount: {}",
                 request.getPan().substring(0, 6), request.getPan().substring(request.getPan().length()-4),
                 request.getAmount());
 
@@ -151,6 +151,12 @@ public class TransactionController {
             transRequest.setCardAcceptorName(request.getCardAcceptorName());
         }
 
+        // 🆕 Pasar additionalFields
+        if (request.getAdditionalFields() != null && !request.getAdditionalFields().isEmpty()) {
+            transRequest.setAdditionalFields(request.getAdditionalFields());
+            logger.info("📋 Additional fields provided: {}", request.getAdditionalFields().keySet());
+        }
+
         return transactionService.processTransaction(transRequest)
                 .thenApply(response -> {
                     return ResponseEntity.ok(response);
@@ -163,7 +169,7 @@ public class TransactionController {
     }
 
     /**
-     * Endpoint genÃ©rico para cualquier tipo de transacciÃ³n
+     * Endpoint generico para cualquier tipo de transaccion
      */
     @PostMapping("/process")
     public CompletableFuture<ResponseEntity<TransactionResponse>> processTransaction(
@@ -211,7 +217,7 @@ public class TransactionController {
     }
 
     /**
-     * Endpoint especÃ­fico para transferencias ACH (otros bancos)
+     * Endpoint especifico para transferencias ACH (otros bancos)
      */
     @PostMapping("/transfer/ach")
     public CompletableFuture<ResponseEntity<TransactionResponse>> processACHTransfer(
@@ -253,7 +259,7 @@ public class TransactionController {
     public CompletableFuture<ResponseEntity<TransactionResponse>> processOwnAccountTransfer(
             @RequestBody Map<String, String> requestData) {
 
-        logger.info("ðŸ”„ Processing own account transfer request");
+        logger.info("Processing own account transfer request");
 
         try {
             TransactionRequest request = TransactionRequest.transfer(
@@ -274,7 +280,7 @@ public class TransactionController {
             return processTransfer(request);
 
         } catch (Exception e) {
-            logger.error("âŒ Error creating own account transfer request: {}", e.getMessage());
+            logger.error("Error creating own account transfer request: {}", e.getMessage());
             return CompletableFuture.completedFuture(
                     ResponseEntity.badRequest()
                             .body(TransactionResponse.systemError("Invalid own account transfer request: " + e.getMessage()))
@@ -283,13 +289,13 @@ public class TransactionController {
     }
 
     /**
-     * Endpoint especÃ­fico para transferencias a terceros afiliados
+     * Endpoint especifico para transferencias a terceros afiliados
      */
     @PostMapping("/transfer/affiliated")
     public CompletableFuture<ResponseEntity<TransactionResponse>> processAffiliatedTransfer(
             @RequestBody Map<String, String> requestData) {
 
-        logger.info("ðŸ”„ Processing affiliated third party transfer request");
+        logger.info("Processing affiliated third party transfer request");
 
         try {
             TransactionRequest request = TransactionRequest.transfer(
@@ -310,7 +316,7 @@ public class TransactionController {
             return processTransfer(request);
 
         } catch (Exception e) {
-            logger.error("âŒ Error creating affiliated transfer request: {}", e.getMessage());
+            logger.error("Error creating affiliated transfer request: {}", e.getMessage());
             return CompletableFuture.completedFuture(
                     ResponseEntity.badRequest()
                             .body(TransactionResponse.systemError("Invalid affiliated transfer request: " + e.getMessage()))
@@ -325,7 +331,7 @@ public class TransactionController {
     public CompletableFuture<ResponseEntity<TransactionResponse>> processNewThirdPartyTransfer(
             @RequestBody Map<String, String> requestData) {
 
-        logger.info("ðŸ”„ Processing new third party transfer request");
+        logger.info("Processing new third party transfer request");
 
         try {
             TransactionRequest request = TransactionRequest.transfer(
@@ -365,7 +371,7 @@ public class TransactionController {
     public CompletableFuture<ResponseEntity<TransactionResponse>> processAuthorization(
             @RequestBody TransactionRequest request) {
 
-        logger.info("ðŸ” Processing authorization request - PAN: {}...{}, Amount: {}, Country: {}",
+        logger.info("Processing authorization request - PAN: {}...{}, Amount: {}, Country: {}",
                 request.getPan().substring(0, 6), request.getPan().substring(request.getPan().length()-4),
                 request.getAmount(), request.getAcquiringCountry());
 
@@ -375,20 +381,132 @@ public class TransactionController {
         return transactionService.processTransaction(request)
                 .thenApply(ResponseEntity::ok)
                 .exceptionally(ex -> {
-                    logger.error("âŒ Error processing authorization: {}", ex.getMessage());
+                    logger.error("Error processing authorization: {}", ex.getMessage());
                     return ResponseEntity.internalServerError()
                             .body(TransactionResponse.systemError("Authorization error: " + ex.getMessage()));
                 });
     }
+    /**
+     * Endpoint para transacciones de Depósito
+     * Processing Code: 21XXXX
+     * MTI: 0200
+     */
+    @PostMapping("/deposit")
+    public CompletableFuture<ResponseEntity<TransactionResponse>> deposit(
+            @RequestBody TransactionRequest request) {
+
+        logger.info("📤 Deposit request - PAN: {}...{}, Amount: {}, Account: {}",
+                request.getPan().substring(0, 6),
+                request.getPan().substring(request.getPan().length()-4),
+                request.getAmount(),
+                request.getAccount());
+
+        // Validar campos requeridos
+        if (request.getPan() == null || request.getPan().trim().isEmpty()) {
+            return CompletableFuture.completedFuture(
+                    ResponseEntity.badRequest()
+                            .body(TransactionResponse.systemError("PAN es requerido para depósitos"))
+            );
+        }
+
+        if (request.getAmount() == null || request.getAmount().trim().isEmpty()) {
+            return CompletableFuture.completedFuture(
+                    ResponseEntity.badRequest()
+                            .body(TransactionResponse.systemError("Amount es requerido para depósitos"))
+            );
+        }
+
+        if (request.getAccount() == null || request.getAccount().trim().isEmpty()) {
+            return CompletableFuture.completedFuture(
+                    ResponseEntity.badRequest()
+                            .body(TransactionResponse.systemError("Cuenta destino (campo 103) es requerida para depósitos"))
+            );
+        }
+
+        // Establecer tipo de transacción
+        request.setTransactionType("DEPOSIT");
+
+        return transactionService.processTransaction(request)
+                .thenApply(response -> {
+                    logger.info("✅ Deposit procesado - ResponseCode: {}, RRN: {}",
+                            response.getResponseCode(), response.getRrn());
+                    return ResponseEntity.ok(response);
+                })
+                .exceptionally(ex -> {
+                    logger.error("❌ Error en deposit: {}", ex.getMessage());
+                    return ResponseEntity.internalServerError()
+                            .body(TransactionResponse.systemError(ex.getMessage()));
+                });
+    }
 
     /**
-     * Endpoint especÃ­fico para autorizaciones de compras extranjeras
+     * Endpoint para transacciones de Cashback
+     * Processing Code: 090000
+     * MTI: 0100 o 0200
+     */
+    @PostMapping("/cashback")
+    public CompletableFuture<ResponseEntity<TransactionResponse>> cashback(
+            @RequestBody TransactionRequest request) {
+
+        logger.info("📤 Cashback request - PAN: {}...{}, Amount: {}, CashbackAmount: {}",
+                request.getPan().substring(0, 6),
+                request.getPan().substring(request.getPan().length()-4),
+                request.getAmount(),
+                request.getCashbackAmount());
+
+        // Validar campos requeridos
+        if (request.getPan() == null || request.getPan().trim().isEmpty()) {
+            return CompletableFuture.completedFuture(
+                    ResponseEntity.badRequest()
+                            .body(TransactionResponse.systemError("PAN es requerido para cashback"))
+            );
+        }
+
+        if (request.getAmount() == null || request.getAmount().trim().isEmpty()) {
+            return CompletableFuture.completedFuture(
+                    ResponseEntity.badRequest()
+                            .body(TransactionResponse.systemError("Amount es requerido para cashback"))
+            );
+        }
+
+        if (request.getTrack2() == null || request.getTrack2().trim().isEmpty()) {
+            return CompletableFuture.completedFuture(
+                    ResponseEntity.badRequest()
+                            .body(TransactionResponse.systemError("Track2 es requerido para cashback"))
+            );
+        }
+
+        if (request.getCashbackAmount() == null || request.getCashbackAmount().trim().isEmpty()) {
+            return CompletableFuture.completedFuture(
+                    ResponseEntity.badRequest()
+                            .body(TransactionResponse.systemError("Cashback amount es requerido"))
+            );
+        }
+
+        // Establecer tipo de transacción
+        request.setTransactionType("CASHBACK");
+
+        return transactionService.processTransaction(request)
+                .thenApply(response -> {
+                    logger.info("✅ Cashback procesado - ResponseCode: {}, RRN: {}",
+                            response.getResponseCode(), response.getRrn());
+                    return ResponseEntity.ok(response);
+                })
+                .exceptionally(ex -> {
+                    logger.error("❌ Error en cashback: {}", ex.getMessage());
+                    return ResponseEntity.internalServerError()
+                            .body(TransactionResponse.systemError(ex.getMessage()));
+                });
+    }
+
+    /**
+     * Endpoint especifico para autorizaciones de compras extranjeras
      */
     @PostMapping("/authorization/foreign-purchase")
     public CompletableFuture<ResponseEntity<TransactionResponse>> processForeignPurchase(
             @RequestBody Map<String, String> requestData) {
 
-        logger.info("ðŸ” Processing foreign purchase authorization request");
+        logger.info("Processing foreign purchase authorization request");
 
         try {
             TransactionRequest request = TransactionRequest.foreignPurchase(
@@ -410,7 +528,7 @@ public class TransactionController {
             return processAuthorization(request);
 
         } catch (Exception e) {
-            logger.error("âŒ Error creating foreign purchase request: {}", e.getMessage());
+            logger.error("Error creating foreign purchase request: {}", e.getMessage());
             return CompletableFuture.completedFuture(
                     ResponseEntity.badRequest()
                             .body(TransactionResponse.systemError("Invalid foreign purchase request: " + e.getMessage()))
@@ -419,13 +537,13 @@ public class TransactionController {
     }
 
     /**
-     * Endpoint especÃ­fico para autorizaciones de retiros ATM externos
+     * Endpoint especifico para autorizaciones de retiros ATM externos
      */
     @PostMapping("/authorization/external-atm")
     public CompletableFuture<ResponseEntity<TransactionResponse>> processExternalATMWithdrawal(
             @RequestBody Map<String, String> requestData) {
 
-        logger.info("ðŸ” Processing external ATM withdrawal authorization request");
+        logger.info("Processing external ATM withdrawal authorization request");
 
         try {
             TransactionRequest request = TransactionRequest.authorization(
@@ -447,7 +565,7 @@ public class TransactionController {
             return processAuthorization(request);
 
         } catch (Exception e) {
-            logger.error("âŒ Error creating external ATM request: {}", e.getMessage());
+            logger.error("Error creating external ATM request: {}", e.getMessage());
             return CompletableFuture.completedFuture(
                     ResponseEntity.badRequest()
                             .body(TransactionResponse.systemError("Invalid external ATM request: " + e.getMessage()))
@@ -464,7 +582,7 @@ public class TransactionController {
      */
     @PostMapping("/transfer/validate")
     public ResponseEntity<ValidationResult> validateTransferConfig(@RequestBody TransactionRequest request) {
-        logger.info("ðŸ” Validating transfer configuration");
+        logger.info("Validating transfer configuration");
 
         try {
             request.setTransactionType("TRANSFER");

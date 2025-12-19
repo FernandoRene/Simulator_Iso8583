@@ -79,8 +79,8 @@ public class SimulatorService {
             ISOMsg isoRequest = createISOMessage(request);
             ISOMsg isoResponse = messageSimulator.sendMessage(isoRequest);
 
-            // Convertir respuesta ISO a DTO
-            MessageResponse response = convertToMessageResponse(isoResponse, request);
+            // 🆕 Convertir respuesta ISO a DTO, pasando también el isoRequest
+            MessageResponse response = convertToMessageResponse(isoRequest, isoResponse, request);
             response.setResponseTime((long) responseTime);
             response.setMockMode(true);
 
@@ -123,8 +123,8 @@ public class SimulatorService {
 
             long responseTime = System.currentTimeMillis() - startTime;
 
-            // Convertir respuesta ISO a DTO
-            MessageResponse response = convertToMessageResponse(isoResponse, request);
+            // 🆕 Convertir respuesta ISO a DTO, pasando también el isoRequest
+            MessageResponse response = convertToMessageResponse(isoRequest, isoResponse, request);
             response.setResponseTime(responseTime);
             response.setMockMode(false);
 
@@ -248,7 +248,9 @@ public class SimulatorService {
 
     private ISOMsg createISOMessage(MessageRequest request) throws ISOException {
         ISOMsg msg = new ISOMsg();
-        msg.setMTI(request.getMessageType());
+        // Extraer MTI numérico
+        String numericMti = extractNumericMti(request.getMessageType());
+        msg.setMTI(numericMti);  // ← Usar MTI numérico
 
         if (request.getFields() != null) {
             for (Map.Entry<String, String> field : request.getFields().entrySet()) {
@@ -264,18 +266,26 @@ public class SimulatorService {
         return msg;
     }
 
-    private MessageResponse convertToMessageResponse(ISOMsg isoResponse, MessageRequest originalRequest) {
+    private MessageResponse convertToMessageResponse(ISOMsg isoRequest, ISOMsg isoResponse, MessageRequest originalRequest) throws ISOException {
         try {
             MessageResponse response = new MessageResponse(true);
             response.setRequestMti(originalRequest.getMessageType());
             response.setResponseMti(isoResponse.getMTI());
             response.setResponseCode(isoResponse.getString(39));
             response.setTimestamp(LocalDateTime.now());
-            response.setRequestFields(originalRequest.getFields());
+
+            // 🆕 Extraer TODOS los campos del REQUEST (incluyendo generados)
+            Map<String, String> requestFields = new HashMap<>();
+            for (int i = 0; i <= 128; i++) {
+                if (isoRequest.hasField(i)) {
+                    requestFields.put(String.valueOf(i), isoRequest.getString(i));
+                }
+            }
+            response.setRequestFields(requestFields);
 
             // Convertir campos de respuesta ISO a Map
             Map<String, String> responseFields = new HashMap<>();
-            for (int i = 1; i <= 128; i++) {
+            for (int i = 0; i <= 128; i++) {
                 if (isoResponse.hasField(i)) {
                     responseFields.put(String.valueOf(i), isoResponse.getString(i));
                 }
@@ -390,5 +400,13 @@ public class SimulatorService {
         }
         result.put("timestamp", LocalDateTime.now());
         return result;
+    }
+
+    private String extractNumericMti(String messageType) {
+        if (messageType.contains("_")) {
+            String[] parts = messageType.split("_");
+            return parts[parts.length - 1];  // "0200" de "FINANCIAL_REQUEST_0200"
+        }
+        return messageType;
     }
 }
