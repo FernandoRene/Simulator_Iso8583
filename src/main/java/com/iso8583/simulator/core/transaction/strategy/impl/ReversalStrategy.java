@@ -14,77 +14,117 @@ import java.time.format.DateTimeFormatter;
 import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 /**
- * Estrategia para transacciones de Purchase (Compra)
- * Processing Code: 000000
+ * Estrategia para transacciones de Reversal (Reversa)
+ * Processing Code: 200000
+ * MTI: 0400 (Financial Transaction Reversal Request) o 0420 (Reversal Advice)
+ *
+ * Las reversas se utilizan para cancelar una transacción previamente autorizada.
+ * Requieren información de la transacción original (STAN, RRN, DateTime, etc.)
  */
 @Component
-public class PurchaseStrategy implements TransactionStrategy {
+@Service
+public class ReversalStrategy implements TransactionStrategy {
 
     private static final Logger logger = LoggerFactory.getLogger(TransactionController.class);
 
     @Override
     public String getTransactionType() {
-        return "PURCHASE";
+        return "REVERSAL";
     }
 
     @Override
     public String[] getProcessingCodes() {
-        return new String[]{"000000", "001000", "003000"};
+        return new String[]{"200000"};
     }
 
     @Override
     public ISOMsg buildMessage(TransactionRequest request) throws ISOException {
         ISOMsg msg = new ISOMsg();
-        msg.setMTI("0200"); // Financial Transaction Request
 
         Map<String, String> additionalFields = request.getAdditionalFields();
 
-        // Campos obligatorios para Purchase
+        // MTI parametrizable: 0400 (default) o 0420
+        String mti = getFieldOrDefault(additionalFields, "mti", "0400");
+        if (!mti.equals("0400") && !mti.equals("0420")) {
+            logger.warn("MTI inválido para reversa: {}. Usando 0400 por defecto", mti);
+            mti = "0400";
+        }
+        msg.setMTI(mti);
+        logger.debug("Reversa con MTI: {}", mti);
+
+        // Campos obligatorios básicos
         msg.set(2, request.getPan());
-        msg.set(3, getFieldOrDefault(additionalFields, "3", "000000"));
+        msg.set(3, getFieldOrDefault(additionalFields, "3", "200000")); // Processing Code para Reversal
         msg.set(4, formatAmount(request.getAmount()));
 
-        // Campos de fecha/hora SIEMPRE se regeneran (seguridad)
+        // Campos de fecha/hora actuales (de la reversa)
         msg.set(7, getCurrentTransmissionDateTime());
         msg.set(12, getCurrentTime());
         msg.set(13, getCurrentDate());
-        msg.set(15, getCurrentDate());
 
-        // Campos que pueden venir de additionalFields o se generan
-        msg.set(11, getFieldOrGenerate(additionalFields, "11", this::generateStan));
+        // ✅ CORRECCIÓN: STAN y RRN de la transacción ORIGINAL
+        String originalStan = additionalFields != null ? additionalFields.get("originalStan") : null;
+        String originalRrn = additionalFields != null ? additionalFields.get("originalRrn") : null;
+
+        if (originalStan == null || originalStan.isEmpty()) {
+            logger.warn("⚠️ originalStan no proporcionado en reversa, generando nuevo STAN");
+            originalStan = generateStan();
+        }
+
+        if (originalRrn == null || originalRrn.isEmpty()) {
+            logger.warn("⚠️ originalRrn no proporcionado en reversa, generando nuevo RRN");
+            originalRrn = generateRrn();
+        }
+
+        msg.set(11, originalStan);
+        msg.set(37, originalRrn);
+        logger.info("✓ Reversa - STAN original: {}, RRN original: {}", originalStan, originalRrn);
+
+        // Campos que normalmente se copian del original
         msg.set(14, getFieldOrExtract(additionalFields, "14", () -> extractExpiryFromTrack2(request.getTrack2())));
         msg.set(18, getFieldOrDefault(additionalFields, "18", "5999"));
         msg.set(19, getFieldOrDefault(additionalFields, "19", "068"));
         msg.set(22, getFieldOrDefault(additionalFields, "22", "051"));
         msg.set(25, getFieldOrDefault(additionalFields, "25", "00"));
         msg.set(32, getFieldOrDefault(additionalFields, "32", "409911"));
+
+        // Track2 (puede ser opcional en reversas según implementación)
         if (request.getTrack2() != null && !request.getTrack2().trim().isEmpty()) {
             msg.set(35, request.getTrack2());
         }
-        msg.set(37, getFieldOrGenerate(additionalFields, "37", this::generateRrn));
+
         msg.set(41, request.getTerminalId());
         msg.set(42, request.getCardAcceptorId());
         msg.set(43, getFieldOrDefault(additionalFields, "43", request.getCardAcceptorName()));
         msg.set(49, getFieldOrDefault(additionalFields, "49", request.getCurrencyCode()));
 
-        // 🆕 AGREGAR TODOS LOS CAMPOS ADICIONALES QUE NO ESTÉN YA SETEADOS
+        // **CAMPO CRÍTICO DE REVERSA: DE 90 - Original Data Elements**
+        String originalDataElements = buildOriginalDataElements(additionalFields);
+        if (originalDataElements != null) {
+            msg.set(90, originalDataElements);
+            logger.debug("Campo 90 (Original Data Elements): {}", originalDataElements);
+        }
+
+        // Agregar todos los campos adicionales que no están ya seteados
         if (additionalFields != null && !additionalFields.isEmpty()) {
             for (Map.Entry<String, String> entry : additionalFields.entrySet()) {
                 try {
                     int fieldNumber = Integer.parseInt(entry.getKey());
 
-                    // No sobrescribir campos críticos de seguridad
-                    if (fieldNumber != 7 && fieldNumber != 12 && fieldNumber != 13 && fieldNumber != 15) {
-                        // Solo setear si no fue seteado antes
+                    // No sobrescribir campos críticos
+                    if (fieldNumber != 7 && fieldNumber != 12 && fieldNumber != 13
+                            && fieldNumber != 11 && fieldNumber != 37) {  // ← AGREGAR 11 y 37
                         if (!msg.hasField(fieldNumber)) {
                             msg.set(fieldNumber, entry.getValue());
                             logger.debug("Campo adicional {} agregado: {}", fieldNumber, entry.getValue());
                         }
                     }
                 } catch (NumberFormatException e) {
-                    logger.warn("Campo adicional ignorado (no numérico): {}", entry.getKey());
+                    // Ignorar claves no numéricas como "originalStan", "originalRrn"
+                    logger.debug("Campo adicional no numérico ignorado: {}", entry.getKey());
                 }
             }
         }
@@ -96,21 +136,14 @@ public class PurchaseStrategy implements TransactionStrategy {
     public ValidationResult validateRequest(TransactionRequest request) {
         ValidationResult result = new ValidationResult();
 
-        // Obtener Entry Mode de additionalFields
-        String entryMode = "051"; // Default Chip/EMV
-        if (request.getAdditionalFields() != null && request.getAdditionalFields().containsKey("22")) {
-            entryMode = request.getAdditionalFields().get("22");
-        }
-
         // Validaciones comunes
         validatePanFormat(request.getPan(), result);
         validateAmountFormat(request.getAmount(), result);
-
-        // ✅ Validación CONDICIONAL de Track2 según Entry Mode
-        validateTrack2Format(request.getTrack2(), entryMode, result);
-
         validateTerminalFormat(request.getTerminalId(), result);
         validateCardAcceptorFormat(request.getCardAcceptorId(), result);
+
+        // **VALIDACIONES ESPECÍFICAS DE REVERSA**
+        validateReversalSpecificFields(request, result);
 
         return result;
     }
@@ -127,17 +160,112 @@ public class PurchaseStrategy implements TransactionStrategy {
 
     @Override
     public boolean requiresPIN() {
-        return true; // Purchase normalmente requiere PIN
+        return false; // Reversas normalmente NO requieren PIN
     }
 
     @Override
     public String[] getRequiredFields() {
-        return new String[]{"pan", "track2", "amount", "terminalId", "cardAcceptorId"};
+        // Para reversas, los campos requeridos pueden variar
+        // Como mínimo: PAN, amount, terminalId, cardAcceptorId
+        return new String[]{"pan", "amount", "terminalId", "cardAcceptorId"};
     }
 
     // ============================================================================
-    // MÉTODOS DE VALIDACIÓN (COPIADOS DE CashAdvanceStrategy)
-    // En producción, estos irían en una clase base AbstractTransactionStrategy
+    // MÉTODOS ESPECÍFICOS DE REVERSA
+    // ============================================================================
+
+    /**
+     * Construye el campo DE 90 (Original Data Elements)
+     * Formato típico: OriginalMTI + OriginalSTAN + OriginalDateTime + OriginalAcquiringInstID
+     */
+    private String buildOriginalDataElements(Map<String, String> additionalFields) {
+        if (additionalFields == null) {
+            return null;
+        }
+
+        // Intentar construir DE 90 desde campos individuales
+        String originalMTI = additionalFields.get("originalMTI");
+        String originalSTAN = additionalFields.get("originalSTAN");
+        String originalDateTime = additionalFields.get("originalDateTime");
+        String originalAcqInstID = additionalFields.get("originalAcqInstID");
+
+        // Si viene el campo 90 completo, usarlo directamente
+        if (additionalFields.containsKey("90")) {
+            return additionalFields.get("90");
+        }
+
+        // Si vienen los campos individuales, construir el DE 90
+        if (originalMTI != null && originalSTAN != null && originalDateTime != null) {
+            StringBuilder de90 = new StringBuilder();
+            de90.append(originalMTI);                    // 4 dígitos
+            de90.append(originalSTAN);                   // 6 dígitos
+            de90.append(originalDateTime);               // 10 dígitos (MMddHHmmss)
+            if (originalAcqInstID != null) {
+                de90.append(originalAcqInstID);          // Variable
+            }
+            return de90.toString();
+        }
+
+        logger.debug("No se pudo construir campo 90 - campos originales no proporcionados");
+        return null;
+    }
+
+    /**
+     * Validaciones específicas de reversa
+     */
+    private void validateReversalSpecificFields(TransactionRequest request, ValidationResult result) {
+        result.addValidation("REVERSAL_SPECIFIC");
+
+        Map<String, String> additionalFields = request.getAdditionalFields();
+        if (additionalFields == null) {
+            result.addWarning("⚠️ No se proporcionaron campos adicionales para reversa");
+            return;
+        }
+
+        // Validar campos críticos para correlación (parametrizable)
+        validateCriticalFieldsForReversal(additionalFields, result);
+
+        // Validar MTI si viene especificado
+        if (additionalFields.containsKey("mti")) {
+            String mti = additionalFields.get("mti");
+            if (!mti.equals("0400") && !mti.equals("0420")) {
+                result.addWarning("⚠️ MTI inválido para reversa: " + mti + " (esperado: 0400 o 0420)");
+            }
+        }
+    }
+
+    /**
+     * Valida campos críticos para correlación de reversa
+     * Campos típicos: DE 3, 11, 13, 37, 41 (parametrizable)
+     */
+    private void validateCriticalFieldsForReversal(Map<String, String> additionalFields, ValidationResult result) {
+        // Estos campos ayudan a identificar la transacción original
+        boolean hasOriginalSTAN = additionalFields.containsKey("originalSTAN") || additionalFields.containsKey("11");
+        boolean hasOriginalRRN = additionalFields.containsKey("originalRRN") || additionalFields.containsKey("37");
+        boolean hasOriginalDateTime = additionalFields.containsKey("originalDateTime") || additionalFields.containsKey("7");
+
+        if (!hasOriginalSTAN && !hasOriginalRRN) {
+            result.addWarning("⚠️ Se recomienda incluir STAN o RRN original para mejor correlación");
+        }
+
+        // Validar formato de campos originales si existen
+        if (additionalFields.containsKey("originalSTAN")) {
+            String originalSTAN = additionalFields.get("originalSTAN");
+            if (!originalSTAN.matches("\\d{6}")) {
+                result.addError("STAN original debe ser 6 dígitos");
+            }
+        }
+
+        if (additionalFields.containsKey("originalRRN")) {
+            String originalRRN = additionalFields.get("originalRRN");
+            if (!originalRRN.matches("\\d{12}")) {
+                result.addWarning("⚠️ RRN original debería ser 12 dígitos");
+            }
+        }
+    }
+
+    // ============================================================================
+    // MÉTODOS DE VALIDACIÓN (copiados de PurchaseStrategy)
     // ============================================================================
 
     private void validatePanFormat(String pan, ValidationResult result) {
@@ -182,37 +310,6 @@ public class PurchaseStrategy implements TransactionStrategy {
         }
     }
 
-    private void validateTrack2Format(String track2, String entryMode, ValidationResult result) {
-        result.addValidation("TRACK2_FORMAT");
-
-        // ✅ Entry Modes que NO requieren Track2
-        boolean track2Optional = entryMode.equals("010") || // Manual/Keyed (Ecommerce)
-                entryMode.equals("011") || // Manual/Keyed
-                entryMode.equals("012") || // E-commerce
-                entryMode.equals("801") || // Fall-back
-                entryMode.equals("810") || // E-commerce (Mastercard/Visa)
-                entryMode.equals("901");   // Banda magnética completa (CVV)
-
-        // Si Track2 es opcional y no viene, OK
-        if (track2Optional && (track2 == null || track2.trim().isEmpty())) {
-            logger.debug("Track2 opcional para Entry Mode {}", entryMode);
-            return;
-        }
-
-        // Si Track2 es obligatorio (051, 021) y no viene, ERROR
-        if (!track2Optional && (track2 == null || track2.trim().isEmpty())) {
-            result.addError("Track2 es obligatorio para Entry Mode " + entryMode);
-            return;
-        }
-
-        // Si Track2 viene (opcional u obligatorio), validar formato
-        if (track2 != null && !track2.trim().isEmpty()) {
-            if (!track2.matches("\\d{13,19}[D=]\\d{4}.*")) {
-                result.addWarning("⚠️ Track2 no tiene formato estándar - puede ser testing personalizado");
-            }
-        }
-    }
-
     private void validateTerminalFormat(String terminalId, ValidationResult result) {
         result.addValidation("TERMINAL_FORMAT");
 
@@ -234,7 +331,7 @@ public class PurchaseStrategy implements TransactionStrategy {
     }
 
     // ============================================================================
-    // MÉTODOS UTILITARIOS (COPIADOS DE CashAdvanceStrategy)
+    // MÉTODOS UTILITARIOS (copiados de PurchaseStrategy)
     // ============================================================================
 
     private boolean isValidLuhn(String pan) {
@@ -259,6 +356,10 @@ public class PurchaseStrategy implements TransactionStrategy {
     }
 
     private String extractExpiryFromTrack2(String track2) {
+        if (track2 == null || track2.isEmpty()) {
+            return "2709"; // Default
+        }
+
         try {
             int equalIndex = track2.indexOf('=');
             if (equalIndex > 0 && track2.length() > equalIndex + 4) {
@@ -299,8 +400,6 @@ public class PurchaseStrategy implements TransactionStrategy {
 
         return rrn;
     }
-
-    // 🆕 AGREGAR estos métodos al final de la clase (antes del último })
 
     /**
      * Obtiene campo de additionalFields o usa valor por defecto

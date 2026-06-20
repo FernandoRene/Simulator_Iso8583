@@ -13,6 +13,7 @@ public class SimulatorConfiguration {
 
     private SimulatorMode mode = SimulatorMode.MOCK; // Modo por defecto
     private boolean dynamicModeChange = true; // Permitir cambio dinámico
+    private boolean showMockTools = true; // Visibilidad de herramientas Mock en el frontend
 
     private SwitchConfig switchConfig = new SwitchConfig();
     private MockConfig mockConfig = new MockConfig();
@@ -38,6 +39,14 @@ public class SimulatorConfiguration {
 
     public void setDynamicModeChange(boolean dynamicModeChange) {
         this.dynamicModeChange = dynamicModeChange;
+    }
+
+    public boolean isShowMockTools() {
+        return showMockTools;
+    }
+
+    public void setShowMockTools(boolean showMockTools) {
+        this.showMockTools = showMockTools;
     }
 
     public SwitchConfig getSwitch() {

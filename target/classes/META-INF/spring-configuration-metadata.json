@@ -1,6 +1,11 @@
 {
   "groups": [
     {
+      "name": "card-vault",
+      "type": "com.iso8583.simulator.core.cardvault.CardVaultProperties",
+      "sourceType": "com.iso8583.simulator.core.cardvault.CardVaultProperties"
+    },
+    {
       "name": "iso8583.simulator",
       "type": "com.iso8583.simulator.core.config.SimulatorConfiguration",
       "sourceType": "com.iso8583.simulator.core.config.SimulatorConfiguration"
@@ -65,6 +70,19 @@
     }
   ],
   "properties": [
+    {
+      "name": "card-vault.seed-path",
+      "type": "java.lang.String",
+      "description": "Ruta opcional de una \"semilla\" inicial (classpath:... o ruta de archivo). Solo se usa si storagePath aún no existe (primer arranque). Si no se configura, el vault arranca vacío.",
+      "sourceType": "com.iso8583.simulator.core.cardvault.CardVaultProperties"
+    },
+    {
+      "name": "card-vault.storage-path",
+      "type": "java.lang.String",
+      "description": "Ruta del archivo externo donde se persiste el Card Vault. Debe ser una ruta de filesystem (no dentro del jar), para que pueda leerse\/editarse\/exportarse y sobrevivir a reinicios.",
+      "sourceType": "com.iso8583.simulator.core.cardvault.CardVaultProperties",
+      "defaultValue": ".\/data\/card-vault.json"
+    },
     {
       "name": "iso8583.simulator.connection.auto-reconnect",
       "type": "java.lang.Boolean",
@@ -140,6 +158,12 @@
       "name": "iso8583.simulator.monitoring.performance-tracking",
       "type": "java.lang.Boolean",
       "sourceType": "com.iso8583.simulator.core.config.SimulatorConfiguration$MonitoringConfig",
+      "defaultValue": true
+    },
+    {
+      "name": "iso8583.simulator.show-mock-tools",
+      "type": "java.lang.Boolean",
+      "sourceType": "com.iso8583.simulator.core.config.SimulatorConfiguration",
       "defaultValue": true
     },
     {

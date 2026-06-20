@@ -10,6 +10,7 @@ import java.util.Map;
  */
 public class TransactionRequest {
     // Campos básicos existentes
+    private String mti;  // Message Type Indicator
     private String transactionType;
     private String pan;
     private String track2;
@@ -195,6 +196,9 @@ public class TransactionRequest {
     // ============================================================================
     // GETTERS Y SETTERS - Campos existentes
     // ============================================================================
+
+    public String getMti() { return mti; }
+    public void setMti(String mti) { this.mti = mti; }
 
     public String getTransactionType() { return transactionType; }
     public void setTransactionType(String transactionType) { this.transactionType = transactionType; }

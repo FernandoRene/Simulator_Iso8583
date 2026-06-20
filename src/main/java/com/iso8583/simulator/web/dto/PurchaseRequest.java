@@ -14,6 +14,7 @@ public class PurchaseRequest {
     private String cardAcceptorName;
     private String merchantCategoryCode = "5999"; // General merchandise
     private String currencyCode = "068";
+    private String entryMode; // Campo 22 - POS Entry Mode, elegido en el formulario
 
     // Constructors
     public PurchaseRequest() {}
@@ -52,6 +53,9 @@ public class PurchaseRequest {
 
     public String getCurrencyCode() { return currencyCode; }
     public void setCurrencyCode(String currencyCode) { this.currencyCode = currencyCode; }
+
+    public String getEntryMode() { return entryMode; }
+    public void setEntryMode(String entryMode) { this.entryMode = entryMode; }
 
     private Map<String, String> additionalFields;
 

@@ -1,5 +1,7 @@
 package com.iso8583.simulator.web.dto;
 
+import java.util.Map;
+
 /**
  * DTO para requests de Cash Advance desde el frontend
  */
@@ -11,6 +13,7 @@ public class CashAdvanceRequest {
     private String cardAcceptorId;
     private String cardAcceptorName;
     private String currencyCode = "068";
+    private Map<String, String> additionalFields;
 
     // Constructors
     public CashAdvanceRequest() {}
@@ -46,4 +49,7 @@ public class CashAdvanceRequest {
 
     public String getCurrencyCode() { return currencyCode; }
     public void setCurrencyCode(String currencyCode) { this.currencyCode = currencyCode; }
+
+    public Map<String, String> getAdditionalFields() { return additionalFields; }
+    public void setAdditionalFields(Map<String, String> additionalFields) { this.additionalFields = additionalFields; }
 }

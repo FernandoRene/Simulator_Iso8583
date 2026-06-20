@@ -8,6 +8,8 @@ server:
     min-response-size: 1024
 
 spring:
+  config:
+    import: classpath:config/switch-config.yml
   application:
     name: iso8583-simulator
 
@@ -40,7 +42,8 @@ iso8583:
 
     # Permitir cambio dinámico de modo en runtime
     dynamic-mode-change: true
-
+    active-profile: ${SWITCH_PROFILE:alterno}
+    show-mock-tools: ${SHOW_MOCK_TOOLS:true}
     # Configuración del switch/autorizador (modo REAL)
     switch:
       host: ${AUTHORIZER_HOST:172.16.1.211}

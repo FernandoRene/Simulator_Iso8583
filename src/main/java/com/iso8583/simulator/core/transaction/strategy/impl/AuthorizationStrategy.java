@@ -84,7 +84,9 @@ public class AuthorizationStrategy implements TransactionStrategy {
 
         msg.set(25, getFieldOrDefault(additionalFields, "25", "08"));
         msg.set(32, getFieldOrDefault(additionalFields, "32", request.getAcquiringInstitution() != null ? request.getAcquiringInstitution() : "409911"));
-        msg.set(35, request.getTrack2());
+        if (request.getTrack2() != null && !request.getTrack2().trim().isEmpty()) {
+            msg.set(35, request.getTrack2());
+        }
         msg.set(37, getFieldOrGenerate(additionalFields, "37", this::generateRrn));
         msg.set(41, request.getTerminalId());
         msg.set(42, request.getCardAcceptorId());
@@ -301,8 +303,9 @@ public class AuthorizationStrategy implements TransactionStrategy {
         boolean track2Optional = entryMode.equals("010") || // Manual/Keyed (Ecommerce)
                 entryMode.equals("011") || // Manual/Keyed
                 entryMode.equals("012") || // E-commerce
-                entryMode.equals("072") || // Contactless
-                entryMode.equals("081");   // E-commerce SSL
+                entryMode.equals("801") || // Fall-back
+                entryMode.equals("810") || // E-commerce (Mastercard/Visa)
+                entryMode.equals("901");   // Banda magnética completa (CVV)
 
         // Si Track2 es opcional y no viene, OK
         if (track2Optional && (track2 == null || track2.trim().isEmpty())) {

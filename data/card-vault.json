@@ -1,0 +1,129 @@
+{
+  "issuers" : [ {
+    "id" : "DEMO_BANK",
+    "name" : "Banco de Demostración",
+    "description" : "Datos de ejemplo para pruebas del simulador",
+    "bins" : [ {
+      "bin" : "450123",
+      "description" : "Tarjetas de débito de prueba",
+      "cards" : [ {
+        "pan" : "4501231234567891",
+        "track2" : "4501231234567891=27091015400000000",
+        "expirationDate" : "2709",
+        "cvv2" : "124",
+        "pinBlock" : "B1AA22CC44DD55EE",
+        "balance" : 0,
+        "currencyCode" : "068",
+        "status" : "INSUFFICIENT_FUNDS",
+        "cardholderName" : "TARJETA SIN SALDO",
+        "notes" : "Para probar rechazo por fondos insuficientes"
+      }, {
+        "pan" : "4501231234567892",
+        "track2" : "4501231234567892=27091015400000000",
+        "expirationDate" : "2709",
+        "cvv2" : "125",
+        "pinBlock" : "C2BB33DD55EE66FF",
+        "balance" : 500000,
+        "currencyCode" : "068",
+        "status" : "BLOCKED",
+        "cardholderName" : "TARJETA BLOQUEADA",
+        "notes" : "Para probar rechazo por tarjeta bloqueada"
+      }, {
+        "pan" : "4501231234567890",
+        "track2" : "4501231234567890=27091015400000000",
+        "expirationDate" : "2709",
+        "cvv2" : "124",
+        "pinBlock" : "A0FF3BCA925025F4",
+        "balance" : 1000000,
+        "currencyCode" : "068",
+        "status" : "ACTIVE",
+        "cardholderName" : "TARJETA DE PRUEBA",
+        "notes" : "Saldo suficiente para pruebas felices"
+      } ]
+    }, {
+      "bin" : "511111",
+      "description" : "Bin de prueba",
+      "cards" : [ {
+        "pan" : "5111111111111111",
+        "track2" : "5111111111111111D27092261317843300000",
+        "expirationDate" : "2709",
+        "cvv2" : "122",
+        "pinBlock" : "",
+        "currencyCode" : "",
+        "status" : "ACTIVE",
+        "cardholderName" : "",
+        "notes" : "Cuenta usada: \"5111111100\""
+      } ]
+    }, {
+      "bin" : "421828",
+      "description" : "Bin de prueba",
+      "cards" : [ {
+        "pan" : "4218281013196163",
+        "track2" : "4218281013196163=27091015400000000",
+        "expirationDate" : "2709",
+        "cvv2" : "",
+        "pinBlock" : "",
+        "currencyCode" : "",
+        "status" : "ACTIVE",
+        "cardholderName" : "",
+        "notes" : "Cuenta: \"3196163100\""
+      } ]
+    }, {
+      "bin" : "411111",
+      "description" : "Pruebas 12",
+      "cards" : [ {
+        "pan" : "4111111111111112",
+        "track2" : "",
+        "expirationDate" : "2709",
+        "cvv2" : "123",
+        "pinBlock" : "",
+        "currencyCode" : "",
+        "status" : "ACTIVE",
+        "cardholderName" : "",
+        "notes" : ""
+      } ]
+    } ]
+  }, {
+    "id" : "Bisa",
+    "name" : "Banco Bisa",
+    "bins" : [ {
+      "bin" : "478786",
+      "description" : "Bisa Efectiva",
+      "cards" : [ {
+        "pan" : "4787861918426962",
+        "track2" : "4787861918426962",
+        "expirationDate" : "3011",
+        "cvv2" : "123",
+        "pinBlock" : "",
+        "currencyCode" : "",
+        "status" : "ACTIVE",
+        "cardholderName" : "Daniel Cespedees",
+        "notes" : "Tarjeta de débito"
+      } ]
+    }, {
+      "bin" : "478789",
+      "description" : "Bisa Senior",
+      "cards" : [ {
+        "pan" : "4787890000001",
+        "track2" : "",
+        "expirationDate" : "2709",
+        "cvv2" : "",
+        "pinBlock" : "A0FF3BCA925025F4",
+        "currencyCode" : "",
+        "status" : "ACTIVE",
+        "cardholderName" : "",
+        "notes" : ""
+      }, {
+        "pan" : "4787890000002",
+        "track2" : "",
+        "expirationDate" : "2709",
+        "cvv2" : "123",
+        "pinBlock" : "",
+        "currencyCode" : "",
+        "status" : "ACTIVE",
+        "cardholderName" : "",
+        "notes" : ""
+      } ]
+    } ]
+  } ]
+}

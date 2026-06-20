@@ -1,5 +1,6 @@
 package com.iso8583.simulator.web.dto;
 
+import java.util.Map;
 
 public class BalanceInquiryRequest {
     private String pan;
@@ -7,6 +8,7 @@ public class BalanceInquiryRequest {
     private String terminalId;
     private String cardAcceptorId;
     private String account;
+    private Map<String, String> additionalFields;
 
     // Constructores, getters y setters
     public BalanceInquiryRequest() {}
@@ -35,4 +37,7 @@ public class BalanceInquiryRequest {
 
     public String getAccount() { return account; }
     public void setAccount(String account) { this.account = account; }
+
+    public Map<String, String> getAdditionalFields() { return additionalFields; }
+    public void setAdditionalFields(Map<String, String> additionalFields) { this.additionalFields = additionalFields; }
 }

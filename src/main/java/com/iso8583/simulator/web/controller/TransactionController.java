@@ -21,7 +21,7 @@ import java.util.concurrent.CompletableFuture;
 /**
  * Controlador REST para transacciones usando Strategy Pattern
  * Integra con el ConnectionManager existente
- * EXTENDIDO: Endpoints para Transfer y Authorization
+ * Endpoints para Transfer y Authorization
  */
 @RestController
 @RequestMapping("/api/v1/transactions")
@@ -69,6 +69,11 @@ public class TransactionController {
                 request.getAccount()
         );
 
+        // 🆕 Pasar additionalFields (incluye PIN block, moneda, settlement, etc.)
+        if (request.getAdditionalFields() != null && !request.getAdditionalFields().isEmpty()) {
+            transRequest.setAdditionalFields(request.getAdditionalFields());
+        }
+
         // Usar el mismo processTransaction que las demÃ¡s transacciones
         return transactionService.processTransaction(transRequest)
                 .thenApply(response -> {
@@ -109,6 +114,11 @@ public class TransactionController {
         // Opcional: sobrescribir cardAcceptorName si viene en el request
         if (request.getCardAcceptorName() != null) {
             transRequest.setCardAcceptorName(request.getCardAcceptorName());
+        }
+
+        // 🆕 Pasar additionalFields (incluye PIN block, moneda, settlement, etc.)
+        if (request.getAdditionalFields() != null && !request.getAdditionalFields().isEmpty()) {
+            transRequest.setAdditionalFields(request.getAdditionalFields());
         }
 
         return transactionService.processTransaction(transRequest)
@@ -157,6 +167,15 @@ public class TransactionController {
             logger.info("📋 Additional fields provided: {}", request.getAdditionalFields().keySet());
         }
 
+        // Entry Mode elegido en el formulario (campo 22) - PurchaseStrategy lo busca
+        // dentro de additionalFields["22"], no como propiedad aparte.
+        if (request.getEntryMode() != null && !request.getEntryMode().trim().isEmpty()) {
+            if (transRequest.getAdditionalFields() == null) {
+                transRequest.setAdditionalFields(new java.util.HashMap<>());
+            }
+            transRequest.getAdditionalFields().putIfAbsent("22", request.getEntryMode());
+        }
+
         return transactionService.processTransaction(transRequest)
                 .thenApply(response -> {
                     return ResponseEntity.ok(response);
@@ -174,7 +193,14 @@ public class TransactionController {
     @PostMapping("/process")
     public CompletableFuture<ResponseEntity<TransactionResponse>> processTransaction(
             @RequestBody TransactionRequest request) {
+        // Loggear todo el objeto request
+        logger.debug("Received request: {}", request);
 
+        // O loggear específicamente cada campo
+        logger.debug("TransactionType: {}, PAN: {}, Other fields...",
+                request.getTransactionType(),
+                request.getPan()
+        );
         logger.info("ðŸ“¤ Generic transaction - Type: {}, PAN: {}...{}",
                 request.getTransactionType(),
                 request.getPan().substring(0, 6),
@@ -534,6 +560,72 @@ public class TransactionController {
                             .body(TransactionResponse.systemError("Invalid foreign purchase request: " + e.getMessage()))
             );
         }
+    }
+
+    /**
+     * Endpoint para transacciones de Reversa (Reversal)
+     * Processing Code: 200000
+     * MTI: 0400 (Financial Transaction Reversal Request) o 0420 (Reversal Advice Request)
+     */
+    @PostMapping("/reversal")
+    public CompletableFuture<ResponseEntity<TransactionResponse>> reversal(
+            @RequestBody TransactionRequest request) {
+
+        logger.info("📤 Reversal request - PAN: {}...{}, Amount: {}, MTI: {}",
+                request.getPan() != null ? request.getPan().substring(0, 6) : "N/A",
+                request.getPan() != null ? request.getPan().substring(request.getPan().length()-4) : "N/A",
+                request.getAmount(),
+                request.getMti() != null ? request.getMti() : "0400");
+
+        // Validar campos requeridos
+        if (request.getPan() == null || request.getPan().trim().isEmpty()) {
+            return CompletableFuture.completedFuture(
+                    ResponseEntity.badRequest()
+                            .body(TransactionResponse.systemError("PAN es requerido para reversas"))
+            );
+        }
+
+        if (request.getAmount() == null || request.getAmount().trim().isEmpty()) {
+            return CompletableFuture.completedFuture(
+                    ResponseEntity.badRequest()
+                            .body(TransactionResponse.systemError("Amount es requerido para reversas"))
+            );
+        }
+
+        if (request.getTerminalId() == null || request.getTerminalId().trim().isEmpty()) {
+            return CompletableFuture.completedFuture(
+                    ResponseEntity.badRequest()
+                            .body(TransactionResponse.systemError("Terminal ID es requerido para reversas"))
+            );
+        }
+
+        if (request.getCardAcceptorId() == null || request.getCardAcceptorId().trim().isEmpty()) {
+            return CompletableFuture.completedFuture(
+                    ResponseEntity.badRequest()
+                            .body(TransactionResponse.systemError("Card Acceptor ID es requerido para reversas"))
+            );
+        }
+
+        // ✅ Track2 es OPCIONAL para reversas (a diferencia de cashback)
+        // ✅ Los campos originalMTI, originalSTAN, originalDateTime, etc. son opcionales
+        //    y se manejan dentro de ReversalStrategy
+
+        // Establecer tipo de transacción
+        request.setTransactionType("REVERSAL");
+
+        return transactionService.processTransaction(request)
+                .thenApply(response -> {
+                    logger.info("✅ Reversal procesado - ResponseCode: {}, RRN: {}, STAN: {}",
+                            response.getResponseCode(),
+                            response.getRrn(),
+                            response.getStan());
+                    return ResponseEntity.ok(response);
+                })
+                .exceptionally(ex -> {
+                    logger.error("❌ Error en reversal: {}", ex.getMessage());
+                    return ResponseEntity.internalServerError()
+                            .body(TransactionResponse.systemError(ex.getMessage()));
+                });
     }
 
     /**

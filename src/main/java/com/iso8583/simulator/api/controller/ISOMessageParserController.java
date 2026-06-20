@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.jpos.iso.ISOException;
 import org.jpos.iso.ISOMsg;
+import org.jpos.iso.ISOUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -101,6 +102,7 @@ public class ISOMessageParserController {
             @SuppressWarnings("unchecked")
             Map<String, String> fields = (Map<String, String>) request.get("fields");
             String packagerName = (String) request.getOrDefault("packager", "linkser");
+            String format = (String) request.getOrDefault("format", "ascii");
 
             if (fields == null || fields.isEmpty()) {
                 return ResponseEntity.badRequest()
@@ -112,11 +114,14 @@ public class ISOMessageParserController {
 
             ISOMsg msg = parser.buildFromMap(fields, packagerName);
             byte[] packed = msg.pack();
-            String asciiMessage = new String(packed);
+            String encodedMessage = "hex".equalsIgnoreCase(format)
+                    ? ISOUtil.hexString(packed)
+                    : new String(packed);
 
             Map<String, Object> response = new HashMap<>();
             response.put("success", true);
-            response.put("message", asciiMessage);
+            response.put("message", encodedMessage);
+            response.put("format", format);
             response.put("mti", msg.getMTI());
             response.put("length", packed.length);
             response.put("fieldCount", fields.size() - 1);

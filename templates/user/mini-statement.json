@@ -1,14 +1,14 @@
 {
-  "id" : "purchase-contactless",
-  "name" : "Purchase Contactless",
-  "description" : "Compra en POS PEM Contactless",
+  "id" : "mini-statement",
+  "name" : "Mini Statement",
+  "description" : "Template creado desde Custom Builder",
   "category" : "CUSTOM",
   "transactionType" : "CUSTOM",
-  "processingCode" : "000000",
+  "processingCode" : "921010",
   "fields" : {
     "0" : {
       "fieldNumber" : 0,
-      "value" : "0100",
+      "value" : "0200",
       "behavior" : "STATIC",
       "generationRule" : null,
       "editable" : true,
@@ -16,7 +16,7 @@
     },
     "2" : {
       "fieldNumber" : 2,
-      "value" : "4218281013196163",
+      "value" : "4000000000000002",
       "behavior" : "STATIC",
       "generationRule" : null,
       "editable" : true,
@@ -24,7 +24,7 @@
     },
     "3" : {
       "fieldNumber" : 3,
-      "value" : "000000",
+      "value" : "921010",
       "behavior" : "STATIC",
       "generationRule" : null,
       "editable" : true,
@@ -32,7 +32,7 @@
     },
     "4" : {
       "fieldNumber" : 4,
-      "value" : "000000011000",
+      "value" : "000000000000",
       "behavior" : "STATIC",
       "generationRule" : null,
       "editable" : true,
@@ -40,7 +40,7 @@
     },
     "7" : {
       "fieldNumber" : 7,
-      "value" : "0422135608",
+      "value" : "0219000931",
       "behavior" : "STATIC",
       "generationRule" : null,
       "editable" : true,
@@ -48,7 +48,7 @@
     },
     "11" : {
       "fieldNumber" : 11,
-      "value" : "027766",
+      "value" : "111111",
       "behavior" : "STATIC",
       "generationRule" : null,
       "editable" : true,
@@ -56,7 +56,7 @@
     },
     "12" : {
       "fieldNumber" : 12,
-      "value" : "095608",
+      "value" : "000931",
       "behavior" : "STATIC",
       "generationRule" : null,
       "editable" : true,
@@ -64,31 +64,7 @@
     },
     "13" : {
       "fieldNumber" : 13,
-      "value" : "0422",
-      "behavior" : "STATIC",
-      "generationRule" : null,
-      "editable" : true,
-      "description" : null
-    },
-    "15" : {
-      "fieldNumber" : 15,
-      "value" : "0422",
-      "behavior" : "STATIC",
-      "generationRule" : null,
-      "editable" : true,
-      "description" : null
-    },
-    "18" : {
-      "fieldNumber" : 18,
-      "value" : "8220",
-      "behavior" : "STATIC",
-      "generationRule" : null,
-      "editable" : true,
-      "description" : null
-    },
-    "19" : {
-      "fieldNumber" : 19,
-      "value" : "068",
+      "value" : "0219",
       "behavior" : "STATIC",
       "generationRule" : null,
       "editable" : true,
@@ -96,23 +72,7 @@
     },
     "22" : {
       "fieldNumber" : 22,
-      "value" : "071",
-      "behavior" : "STATIC",
-      "generationRule" : null,
-      "editable" : true,
-      "description" : null
-    },
-    "25" : {
-      "fieldNumber" : 25,
-      "value" : "00",
-      "behavior" : "STATIC",
-      "generationRule" : null,
-      "editable" : true,
-      "description" : null
-    },
-    "32" : {
-      "fieldNumber" : 32,
-      "value" : "455782",
+      "value" : "051",
       "behavior" : "STATIC",
       "generationRule" : null,
       "editable" : true,
@@ -120,7 +80,7 @@
     },
     "35" : {
       "fieldNumber" : 35,
-      "value" : "4218281013196163D28112261317843300000",
+      "value" : "4152313854147849=99121011234567890123",
       "behavior" : "STATIC",
       "generationRule" : null,
       "editable" : true,
@@ -128,7 +88,7 @@
     },
     "37" : {
       "fieldNumber" : 37,
-      "value" : "511213027766",
+      "value" : "860335790708",
       "behavior" : "STATIC",
       "generationRule" : null,
       "editable" : true,
@@ -136,7 +96,7 @@
     },
     "41" : {
       "fieldNumber" : 41,
-      "value" : "10537519",
+      "value" : "TERM0001",
       "behavior" : "STATIC",
       "generationRule" : null,
       "editable" : true,
@@ -144,23 +104,7 @@
     },
     "42" : {
       "fieldNumber" : 42,
-      "value" : "046265600000000",
-      "behavior" : "STATIC",
-      "generationRule" : null,
-      "editable" : true,
-      "description" : null
-    },
-    "43" : {
-      "fieldNumber" : 43,
-      "value" : "UNIVERSIDAD UDABOL-CJ1   SANTA CRUZ   BO",
-      "behavior" : "STATIC",
-      "generationRule" : null,
-      "editable" : true,
-      "description" : null
-    },
-    "49" : {
-      "fieldNumber" : 49,
-      "value" : "068",
+      "value" : "MERCHANT001",
       "behavior" : "STATIC",
       "generationRule" : null,
       "editable" : true,
@@ -169,8 +113,8 @@
   },
   "metadata" : { },
   "predefined" : false,
-  "createdAt" : [ 2025, 11, 23, 3, 17, 48, 351973300 ],
-  "updatedAt" : [ 2026, 6, 19, 19, 50, 41, 286135300 ],
+  "createdAt" : [ 2026, 2, 19, 0, 11, 0, 201411300 ],
+  "updatedAt" : [ 2026, 6, 19, 18, 56, 20, 386221200 ],
   "author" : null,
-  "usageCount" : 17
+  "usageCount" : 19
 }

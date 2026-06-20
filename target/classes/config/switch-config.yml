@@ -1,34 +1,39 @@
-switches:
-  your-switch:
-    name: "Core Bancario"
-    description: "Configuración para el autorizador principal"
-    connection:
-      host: "172.16.1.211"
-      port: 5105
-      protocol: "TCP"
-      channel: "ASCIIChannel"
-      timeout: 60000
-      keep-alive: true
-    packager:
-      type: "GenericValidatingPackager"
-      config-file: "packagers/generic-packager.xml"
-    validation:
-      success-response-code: "00"
-      response-field: 39
-      required-fields: [0, 1, 2, 3, 7, 11, 12, 13, 37, 41, 42]
+simulator:
+  switches:
+    principal:
+      name: "Autorizador Principal"
+      description: "Conexión actual en uso (ASCII)"
+      connection:
+        #host: "172.16.1.211"
+        #port: 5105
+        host: "localhost"
+        port: 9000
+        protocol: "TCP"
+        channel: "ASCIIChannel"
+        timeout: 30000
+        keep-alive: true
+      packager:
+        config-file: "packagers/iso87ascii.xml"
+      validation:
+        success-response-code: "00"
+        response-field: 39
+        required-fields: [0, 1, 2, 3, 7, 11, 12, 13, 37, 41, 42]
 
-  mockup-switch:
-    name: "Mockup Switch"
-    description: "Switch simulado para pruebas"
-    connection:
-      host: "localhost"
-      port: 8583
-      protocol: "TCP"
-      channel: "ASCIIChannel"
-      timeout: 30000
-    packager:
-      type: "GenericValidatingPackager"
-      config-file: "packagers/generic-packager.xml"
-    validation:
-      success-response-code: "00"
-      response-field: 39
+    alterno:
+      name: "Perfil Alterno"
+      description: "Preconfigurado con NACChannel y packager EBCDIC para cuando se reciban los datos."
+      connection:
+        host: "localhost"
+        port: 9000
+        protocol: "TCP"
+        channel: "ASCIIChannel"
+        #channel: "NACChannel"
+        timeout: 30000
+        keep-alive: true
+      packager:
+        #config-file: "packagers/iso87ebcdic.xml"
+        config-file: "packagers/iso87ascii.xml"
+      validation:
+        success-response-code: "00"
+        response-field: 39
+        required-fields: [0, 1, 2, 3, 7, 11, 12, 13, 37, 41, 42]

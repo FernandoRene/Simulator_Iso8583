@@ -1,18 +1,24 @@
 package com.iso8583.simulator.core.connection;
 
 import com.iso8583.simulator.core.config.SimulatorConfiguration;
+import com.iso8583.simulator.core.config.SwitchConfiguration;
+import org.jpos.iso.BaseChannel;
 import org.jpos.iso.ISOException;
 import org.jpos.iso.ISOMsg;
 import org.jpos.iso.channel.ASCIIChannel;
+import org.jpos.iso.channel.NACChannel;
 import org.jpos.iso.packager.GenericPackager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.DisposableBean;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.Socket;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -20,6 +26,7 @@ import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -34,7 +41,13 @@ public class ConnectionManager implements InitializingBean, DisposableBean {
     @Autowired
     private SimulatorConfiguration config;
 
-    private AtomicReference<ASCIIChannel> currentChannel = new AtomicReference<>();
+    @Autowired
+    private SwitchConfiguration switchConfiguration;
+
+    @Value("${iso8583.simulator.active-profile}")
+    private String activeProfileName;
+
+    private AtomicReference<BaseChannel> currentChannel = new AtomicReference<>();
     private AtomicBoolean isConnected = new AtomicBoolean(false);
     private AtomicReference<LocalDateTime> lastConnectionAttempt = new AtomicReference<>();
     private AtomicReference<String> lastError = new AtomicReference<>();
@@ -70,16 +83,66 @@ public class ConnectionManager implements InitializingBean, DisposableBean {
         }
     }
 
+    /**
+     * Resuelve el perfil de switch activo (configurable vía iso8583.simulator.active-profile).
+     * No hace referencia a ninguna institución específica: el nombre del perfil es un dato
+     * de configuración, no algo que el código deba conocer.
+     */
+    private SwitchConfiguration.SwitchConfig getActiveProfile() {
+        SwitchConfiguration.SwitchConfig profile = switchConfiguration.getSwitch(activeProfileName);
+        if (profile == null) {
+            throw new IllegalStateException(
+                    "Perfil de switch '" + activeProfileName + "' no encontrado en switch-config.yml");
+        }
+        return profile;
+    }
+
+    /**
+     * Crea el canal jPOS correspondiente según el tipo declarado en el perfil activo.
+     * Soporta ASCIIChannel (autorizador actual) y NACChannel (framing de 2 bytes, TPDU=null).
+     */
+    private BaseChannel createChannel(SwitchConfiguration.SwitchConfig profile) {
+        String channelType = profile.getConnection().getChannel();
+        String host = profile.getConnection().getHost();
+        int port = profile.getConnection().getPort();
+
+        if ("NACChannel".equalsIgnoreCase(channelType)) {
+            return new NACChannel(host, port, packager, null);
+        }
+        // Por defecto, ASCIIChannel
+        return new ASCIIChannel(host, port, packager);
+    }
+
+    /**
+     * Información de solo lectura del perfil activo, para mostrar en el frontend
+     * (sin selector ni cambio en caliente - el cambio de perfil es por configuración + reinicio).
+     */
+    public Map<String, Object> getActiveProfileInfo() {
+        SwitchConfiguration.SwitchConfig profile = getActiveProfile();
+        Map<String, Object> info = new HashMap<>();
+        info.put("profileKey", activeProfileName);
+        info.put("name", profile.getName());
+        info.put("description", profile.getDescription());
+        info.put("host", profile.getConnection().getHost());
+        info.put("port", profile.getConnection().getPort());
+        info.put("channel", profile.getConnection().getChannel());
+        info.put("timeout", profile.getConnection().getTimeout());
+        info.put("packagerFile", profile.getPackager().getConfigFile());
+        return info;
+    }
+
     @Override
     public void afterPropertiesSet() throws Exception {
         try {
             initializePackager();
-            logger.info("🏭 ConnectionManager con PSEUDO-MUX inicializado para {}:{}",
-                    config.getSwitch().getHost(), config.getSwitch().getPort());
+            SwitchConfiguration.SwitchConfig profile = getActiveProfile();
+            logger.info("🏭 ConnectionManager con PSEUDO-MUX inicializado - Perfil: '{}' ({}:{})",
+                    activeProfileName, profile.getConnection().getHost(), profile.getConnection().getPort());
             logger.info("🔧 OutputKeys para matching: [{}]", String.join(", ", outputKeys));
             logger.info("ℹ️ Usar /api/v1/connection/connect para conectar manualmente");
         } catch (Exception e) {
-            logger.error("❌ Error inicializando ConnectionManager: {}", e.getMessage(), e);
+            logger.error("❌ ConnectionManager no pudo inicializarse, abortando arranque: {}", e.getMessage(), e);
+            throw e;
         }
     }
 
@@ -105,28 +168,28 @@ public class ConnectionManager implements InitializingBean, DisposableBean {
     public CompletableFuture<Boolean> connect() {
         return CompletableFuture.supplyAsync(() -> {
             try {
-                logger.info("🏦 Conectando con PSEUDO-MUX al autorizador {}:{}",
-                        config.getSwitch().getHost(), config.getSwitch().getPort());
+                SwitchConfiguration.SwitchConfig profile = getActiveProfile();
+                String host = profile.getConnection().getHost();
+                int port = profile.getConnection().getPort();
+                int timeout = profile.getConnection().getTimeout();
+
+                logger.info("🏦 Conectando con PSEUDO-MUX al autorizador {}:{} - Perfil: '{}'",
+                        host, port, activeProfileName);
 
                 lastConnectionAttempt.set(LocalDateTime.now());
 
                 // Limpiar conexión anterior si existe
                 disconnect();
 
-                // Crear ASCIIChannel
-                ASCIIChannel channel = new ASCIIChannel(
-                        config.getSwitch().getHost(),
-                        config.getSwitch().getPort(),
-                        packager
-                );
-
-                channel.setTimeout(config.getSwitch().getTimeout());
+                // Crear canal según el tipo declarado en el perfil (ASCIIChannel / NACChannel)
+                BaseChannel channel = createChannel(profile);
+                channel.setTimeout(timeout);
 
                 logger.debug("🔌 Intentando conectar canal...");
                 channel.connect();
 
                 if (!channel.isConnected()) {
-                    throw new IOException("No se pudo establecer la conexión ASCIIChannel");
+                    throw new IOException("No se pudo establecer la conexión del canal");
                 }
 
                 logger.debug("✅ Canal conectado exitosamente");
@@ -164,7 +227,7 @@ public class ConnectionManager implements InitializingBean, DisposableBean {
 
             while (shouldListen && isConnected.get()) {
                 try {
-                    ASCIIChannel channel = currentChannel.get();
+                    BaseChannel channel = currentChannel.get();
                     if (channel != null && channel.isConnected()) {
                         // Recibir respuesta (puede hacer timeout normalmente)
                         ISOMsg response = channel.receive();
@@ -312,7 +375,7 @@ public class ConnectionManager implements InitializingBean, DisposableBean {
                     throw new ISOException("No hay conexión activa con el autorizador");
                 }
 
-                ASCIIChannel channel = currentChannel.get();
+                BaseChannel channel = currentChannel.get();
                 if (channel == null || !channel.isConnected()) {
                     logger.warn("⚠️ Canal desconectado, intentando reconectar...");
 
@@ -358,7 +421,7 @@ public class ConnectionManager implements InitializingBean, DisposableBean {
                 }
 
                 // Esperar respuesta con timeout
-                long timeoutMs = config.getSwitch().getTimeout();
+                long timeoutMs = getActiveProfile().getConnection().getTimeout();
 
                 try {
                     ISOMsg response = responseFuture.get(timeoutMs, TimeUnit.MILLISECONDS);
@@ -390,7 +453,7 @@ public class ConnectionManager implements InitializingBean, DisposableBean {
      */
     private void cleanupExpiredRequests() {
         long currentTime = System.currentTimeMillis();
-        long timeoutMs = config.getSwitch().getTimeout();
+        long timeoutMs = getActiveProfile().getConnection().getTimeout();
 
         pendingRequests.entrySet().removeIf(entry -> {
             PendingRequest pending = entry.getValue();
@@ -454,11 +517,11 @@ public class ConnectionManager implements InitializingBean, DisposableBean {
             }
 
             // Desconectar canal
-            ASCIIChannel channel = currentChannel.get();
+            BaseChannel channel = currentChannel.get();
             if (channel != null) {
                 try {
                     if (channel.isConnected()) {
-                        logger.debug("🔌 Desconectando canal ASCIIChannel...");
+                        logger.debug("🔌 Desconectando canal...");
                         channel.disconnect();
                         logger.debug("✅ Canal desconectado");
                     }
@@ -581,18 +644,20 @@ public class ConnectionManager implements InitializingBean, DisposableBean {
     // *** MÉTODOS UTILITARIOS ***
 
     private void initializePackager() throws ISOException {
+        SwitchConfiguration.SwitchConfig profile = getActiveProfile();
+        String packagerPath = profile.getPackager().getConfigFile();
+
         try {
-            packager = new GenericPackager("packagers/iso87ascii.xml");
-            logger.info("Packager inicializado desde packagers/iso87ascii.xml");
-        } catch (Exception e) {
-            logger.warn("Packager personalizado no encontrado, usando genérico: {}", e.getMessage());
-            try {
-                packager = new GenericPackager("jar:packager/iso87ascii.xml");
-                logger.info("Packager genérico inicializado");
-            } catch (Exception e2) {
-                logger.error("Error inicializando packager: {}", e2.getMessage(), e2);
-                throw new ISOException("No se pudo inicializar packager", e2);
+            ClassPathResource resource = new ClassPathResource(packagerPath);
+            try (InputStream is = resource.getInputStream()) {
+                packager = new GenericPackager(is);
             }
+            logger.info("✅ Packager inicializado desde classpath: {} - Perfil: '{}'",
+                    packagerPath, activeProfileName);
+        } catch (Exception e) {
+            logger.error("❌ Error inicializando packager desde {} (perfil '{}'): {}",
+                    packagerPath, activeProfileName, e.getMessage(), e);
+            throw new ISOException("No se pudo inicializar packager desde " + packagerPath, e);
         }
     }
 
@@ -740,14 +805,16 @@ public class ConnectionManager implements InitializingBean, DisposableBean {
     public ConnectionStatus getConnectionStatus() {
         ConnectionStatus status = new ConnectionStatus();
         status.setConnected(isConnected.get());
-        status.setHost(config.getSwitch().getHost());
-        status.setPort(config.getSwitch().getPort());
+
+        SwitchConfiguration.SwitchConfig profile = getActiveProfile();
+        status.setHost(profile.getConnection().getHost());
+        status.setPort(profile.getConnection().getPort());
         status.setLastConnectionAttempt(lastConnectionAttempt.get());
         status.setLastError(lastError.get());
-        status.setChannelType("PSEUDO-MUX con OutputKeys");
+        status.setChannelType("PSEUDO-MUX con OutputKeys (" + profile.getConnection().getChannel() + ")");
         status.setPendingRequestsCount(pendingRequests.size());
 
-        ASCIIChannel channel = currentChannel.get();
+        BaseChannel channel = currentChannel.get();
         if (channel != null) {
             try {
                 status.setChannelConnected(channel.isConnected());
@@ -760,7 +827,7 @@ public class ConnectionManager implements InitializingBean, DisposableBean {
         return status;
     }
 
-    private String getSocketInfo(ASCIIChannel channel) {
+    private String getSocketInfo(BaseChannel channel) {
         try {
             Socket socket = channel.getSocket();
             if (socket != null) {
@@ -815,5 +882,33 @@ public class ConnectionManager implements InitializingBean, DisposableBean {
 
         public int getPendingRequestsCount() { return pendingRequestsCount; }
         public void setPendingRequestsCount(int pendingRequestsCount) { this.pendingRequestsCount = pendingRequestsCount; }
+    }
+    /**
+     * Método para ser usado por el nuevo TransactionService
+     * Mantiene compatibilidad con el método actual sendMessage()
+     */
+    public CompletableFuture<ISOMsg> sendTransactionMessage(ISOMsg request, String transactionType) throws ISOException {
+        // Log específico para el tipo de transacción
+        logger.info("📤 ENVIANDO {} - MTI: {}, STAN: {} [PSEUDO-MUX]",
+                transactionType, request.getMTI(), request.getString(11));
+
+        // Usar el método sendMessage existente (sin cambios)
+        return sendMessage(request);
+    }
+
+    /**
+     * Método utilitario para generar STAN secuencial
+     * Exponer el generador existente para uso en estrategias
+     */
+    public String generateSequentialStan() {
+        return generateStan(); // Usar el método privado existente
+    }
+
+    /**
+     * Método utilitario para generar RRN
+     * Exponer el generador existente para uso en estrategias
+     */
+    public String generateSequentialRrn() {
+        return generateRrn(); // Usar el método privado existente
     }
 }

@@ -80,12 +80,12 @@ public class CashbackStrategy implements TransactionStrategy {
         msg.set(49, getFieldOrDefault(additionalFields, "49", request.getCurrencyCode()));
 
         // Campo 51: Currency code cardholder billing (opcional)
-        if (additionalFields != null && additionalFields.containsKey("51")) {
+        /*if (additionalFields != null && additionalFields.containsKey("51")) {
             msg.set(51, additionalFields.get("51"));
         } else {
             msg.set(51, "840"); // USD default
         }
-
+        */
         // Campo 52: PIN data (opcional, viene del HSM generalmente)
         if (additionalFields != null && additionalFields.containsKey("52")) {
             msg.set(52, additionalFields.get("52"));

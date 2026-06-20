@@ -5,6 +5,8 @@ import com.iso8583.simulator.core.transaction.factory.TransactionStrategyFactory
 import com.iso8583.simulator.core.transaction.strategy.TransactionStrategy;
 import com.iso8583.simulator.core.transaction.model.*;
 import com.iso8583.simulator.core.config.ValidationConfigService;
+import com.iso8583.simulator.core.config.SimulatorConfiguration;
+import com.iso8583.simulator.simulator.MessageSimulator;
 import org.jpos.iso.ISOException;
 import org.jpos.iso.ISOMsg;
 import org.slf4j.Logger;
@@ -36,6 +38,12 @@ public class TransactionService {
 
     @Autowired
     private ValidationConfigService validationConfig;
+
+    @Autowired
+    private SimulatorConfiguration config;
+
+    @Autowired
+    private MessageSimulator messageSimulator;
 
     /**
      * Procesa cualquier tipo de transacción usando Strategy Pattern
@@ -75,9 +83,20 @@ public class TransactionService {
                 logger.info("📤 Mensaje construido - MTI: {}, Processing Code: {}, STAN: {}",
                         isoRequest.getMTI(), isoRequest.getString(3), isoRequest.getString(11));
 
-                // 4. Enviar al core bancario usando ConnectionManager existente
+                // 4. Enviar al core bancario usando ConnectionManager o al messageSimulator
                 long startTime = System.currentTimeMillis();
-                ISOMsg isoResponse = connectionManager.sendMessage(isoRequest).get();
+                ISOMsg isoResponse;
+
+                // Usar MOCK si: (1) config está en MOCK, O (2) no hay conexión activa
+                // Usar REAL solo si: config está en REAL Y hay conexión activa
+                if (connectionManager.isConnected()) {
+                    logger.info("🔌 Conexión TCP activa - usando ConnectionManager (REAL)");
+                    isoResponse = connectionManager.sendMessage(isoRequest).get();
+                } else {
+                    logger.info("🎭 Sin conexión TCP - usando MessageSimulator (MOCK)");
+                    isoResponse = messageSimulator.sendMessage(isoRequest);
+                }
+
                 long responseTime = System.currentTimeMillis() - startTime;
 
                 // 5. Procesar respuesta usando la estrategia
@@ -140,7 +159,18 @@ public class TransactionService {
 
             // 2. Enviar al autorizador
             long startTime = System.currentTimeMillis();
-            ISOMsg isoResponse = connectionManager.sendMessage(isoRequest).get();
+            ISOMsg isoResponse;
+
+            // Usar MOCK si: (1) config está en MOCK, O (2) no hay conexión activa
+            // Usar REAL solo si: config está en REAL Y hay conexión activa
+            if (connectionManager.isConnected()) {
+                logger.info("🔌 CUSTOM - Conexión TCP activa - usando ConnectionManager (REAL)");
+                isoResponse = connectionManager.sendMessage(isoRequest).get();
+            } else {
+                logger.info("🎭 CUSTOM - Sin conexión TCP - usando MessageSimulator (MOCK)");
+                isoResponse = messageSimulator.sendMessage(isoRequest);
+            }
+
             long responseTime = System.currentTimeMillis() - startTime;
 
             // 3. Procesar respuesta (genérico, sin strategy)
@@ -207,9 +237,13 @@ public class TransactionService {
 
     /**
      * Verifica estado de conexión antes de procesar
+     * En modo Mock siempre retorna TRUE
      */
     public boolean isReadyToProcess() {
-        return connectionManager.isConnected();
+        // Si hay conexión → usa REAL
+        // Sin conexión → usa MOCK como fallback
+        // Siempre está listo para procesar
+        return true;
     }
 
     /**
@@ -217,7 +251,12 @@ public class TransactionService {
      */
     public Map<String, Object> getServiceStats() {
         Map<String, Object> stats = new HashMap<>();
-        stats.put("connected", connectionManager.isConnected());
+        boolean connected = connectionManager.isConnected();
+
+        // Modo efectivo basado en estado de conexión
+        stats.put("mode", connected ? "REAL" : "MOCK");
+        stats.put("configMode", config.getMode().getCode());
+        stats.put("connected", connected);
         stats.put("supportedTypes", strategyFactory.getSupportedTransactionTypes().size());
         stats.put("pendingRequests", connectionManager.getPendingRequestsCount());
         stats.put("validationEnabled", validationConfig.isIso8583FormatValidationEnabled());

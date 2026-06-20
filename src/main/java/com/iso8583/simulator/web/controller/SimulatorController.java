@@ -468,6 +468,7 @@ public class SimulatorController {
             capabilities.put("mockSimulation", config.getMode().isMockEnabled());
             capabilities.put("realConnection", config.getMode().isRealEnabled());
             capabilities.put("dynamicModeSwitch", config.isDynamicModeChange());
+            capabilities.put("showMockTools", config.isShowMockTools());
             info.put("capabilities", capabilities);
 
             return ResponseEntity.ok(info);

@@ -45,23 +45,26 @@ public class PackagerManager {
             );
         }
     }
+    /*
     private void loadPackager(String name, String path) {
         try {
             GenericPackager packager = new GenericPackager(path);
             packagers.put(name, packager);
-            logger.info("✅ Packager '{}' cargado desde {}", name, path);
+            logger.info(" Packager '{}' cargado desde {}", name, path);
         } catch (ISOException e) {
-            logger.warn("⚠️ No se pudo cargar packager '{}' desde {}: {}",
+            logger.warn("⚠ No se pudo cargar packager '{}' desde {}: {}",
                     name, path, e.getMessage());
 
             // Intentar cargar desde JAR
             tryLoadFromJar(name, path);
         }
     }
+    */
+     //*/
     /**     NUEVO en Revisión
      * Carga un packager usando ClassPathResource (más confiable)
      */
-    /*
+
     private void loadPackager(String name, String path) {
         logger.info("📦 Intentando cargar packager '{}' desde '{}'", name, path);
 
@@ -111,7 +114,7 @@ public class PackagerManager {
         logger.error("   ❌ FALLO: No se pudo cargar packager '{}' por ningún método", name);
         logger.error("   💡 Verifica que el archivo existe en: src/main/resources/{}", path);
     }
-    */
+
     /**
      * Obtiene un packager por nombre
      */
